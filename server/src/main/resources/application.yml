@@ -21,6 +21,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   session:
     store-type: none
+  resources:
+    static-locations: file:../front/dist/
+
+
 
 
 
