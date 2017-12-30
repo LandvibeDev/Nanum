@@ -25,10 +25,6 @@ public class StudyRestController {
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)
     public List<Study> study() {
-        List<Study> list = studyService.getAll();
-        for(Study study : list){
-            System.out.println(study);
-        }
         return studyService.getAll();
     }
 
