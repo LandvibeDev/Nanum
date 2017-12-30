@@ -1,7 +1,7 @@
 <template>
   <div id="study_list">
     <div v-for="study in studies">
-      <Study :study="study"></Study>
+      <StudyItem :study="study" v-on:clickStudy="clickStudy"></StudyItem>
     </div>
   </div>
 </template>
