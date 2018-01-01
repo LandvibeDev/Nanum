@@ -1,6 +1,8 @@
 package com.landvibe.nanum;
 
+import com.landvibe.nanum.model.Board;
 import com.landvibe.nanum.model.Study;
+import com.landvibe.nanum.repository.BoardRepository;
 import com.landvibe.nanum.repository.StudyRepository;
 import com.sun.corba.se.impl.presentation.rmi.StubFactoryFactoryDynamicBase;
 import org.junit.Test;
@@ -20,6 +22,9 @@ public class NanumApplicationTests {
 	@Autowired
 	StudyRepository studyRepository;
 
+	@Autowired
+	BoardRepository boardRepository;
+
 	@Test
 	@Transactional
 	public void studyTest() {
@@ -31,6 +36,20 @@ public class NanumApplicationTests {
 		for(Study study : list){
 			System.out.println(study);
 		}
+	}
+
+	@Test
+	public void boardTest() {
+//		Board board = new Board("Math",1);
+//		Board board2 = new Board("English",1);
+//		Study study = studyRepository.findById(1);
+//		board.setStudy(study);
+//		board2.setStudy(study);
+//		boardRepository.save(board);
+//		boardRepository.save(board2);
+//		studyRepository.save(study);
+		List<Board> boards = boardRepository.findAll();
+		System.out.println(boards.get(0));
 
 
 	}
