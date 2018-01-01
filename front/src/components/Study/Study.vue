@@ -1,5 +1,6 @@
 <template>
   <div>
+    <StudyWidget id="widget" :studyId = "studyId"></StudyWidget>
     <studyMenu :studyId = "studyId"></studyMenu>
     <div id="content">
       <router-view :study = "study"/>
@@ -12,7 +13,7 @@
   export default {
     name: 'Study',
     created: function () {
-      this.studyId = this.$route.params.id
+      this.studyId = this.$route.params.studyId
       const baseUrl = '/api/studies/' + this.studyId
       this.axios.get(baseUrl)
         .then((result) => {
@@ -34,6 +35,12 @@
   #content{
     width:50%;
     margin: 0 auto;
+  }
+
+  #widget{
+    right : 10%;
+    up : 10%;
+    position : fixed;
   }
 
 </style>

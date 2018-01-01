@@ -1,23 +1,21 @@
 <template>
   <div>
-    <b-card>
-      <b-media>
-        <b-img slot="aside" blank blank-color="#ccc" width="64" alt="placeholder" />
-        <h5 class="mt-0">Main</h5>
-        <p>
+    <b-card-group deck>
+      <b-card img-src="https://placekitten.com/1000/300"
+              img-alt="Card image"
+              img-top
+      >
+        <p class="card-text">
           {{ study.title }}
         </p>
-        <p>
-          {{ study.createdAt }}
-        </p>
-      </b-media>
-    </b-card>
+      </b-card>
+    </b-card-group>
   </div>
 </template>
 
 <script>
   export default {
-    props:["study"]
+    props: ['study']
   }
 </script>
 

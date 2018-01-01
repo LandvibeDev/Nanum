@@ -1,12 +1,21 @@
 <template>
   <div>
-    <studyList></studyList>
+    <div id = "home">
+      <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
+      <b-button>Blog</b-button>
+      <b-button>Code</b-button>
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'Home'
+    name: 'Home',
+    methods:{
+      clickButton:function(routerName){
+        this.$router.push({name:routerName})
+      }
+    }
   }
 </script>
 

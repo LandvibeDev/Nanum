@@ -1,15 +1,14 @@
 <template>
   <div>
-    <b-card-group deck>
-      <b-card img-src="https://placekitten.com/1000/300"
-              img-alt="Card image"
-              img-top
-      v-on:click = "clickStudy">
-        <p class="card-text">
-          {{ study.title }}
+    <b-card>
+      <b-media v-on:click = "clickStudy">
+        <b-img slot="aside" blank blank-color="#ccc" width="64" alt="placeholder" />
+        <h5 class="mt-0">{{ study.title }}</h5>
+        <p>
+          {{ study.createdAt }}
         </p>
-      </b-card>
-    </b-card-group>
+      </b-media>
+    </b-card>
   </div>
 
 </template>
@@ -24,6 +23,7 @@
     methods:{
       clickStudy : function(){
 
+        //this.$router.push({name:"Study",params:{id:this.study.id}})
         this.$router.push('/studies/'+this.study.id)
 
       }
