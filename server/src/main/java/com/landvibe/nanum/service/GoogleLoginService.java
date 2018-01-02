@@ -108,7 +108,8 @@ public class GoogleLoginService {
         GoogleUser findUser = null;
         findUser = googleUserRepository.findBySnsId(googleUser.getSnsId());
         if(findUser != null){
-            System.out.println("there is already exist!" + googleUser);
+//            System.out.println("there is already exist!" + googleUser);
+            System.out.println("there is already exist!");
         } else {
             // 없으면
             // 저장
