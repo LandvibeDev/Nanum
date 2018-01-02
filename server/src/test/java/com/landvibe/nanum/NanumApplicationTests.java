@@ -1,7 +1,9 @@
 package com.landvibe.nanum;
 
 import com.landvibe.nanum.model.Study;
+import com.landvibe.nanum.model.User;
 import com.landvibe.nanum.repository.StudyRepository;
+import com.landvibe.nanum.repository.UserRepository;
 import com.sun.corba.se.impl.presentation.rmi.StubFactoryFactoryDynamicBase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,9 @@ public class NanumApplicationTests {
 	@Autowired
 	StudyRepository studyRepository;
 
+	@Autowired
+    UserRepository userRepository;
+
 	@Test
 	@Transactional
 	public void studyTest() {
@@ -34,5 +39,17 @@ public class NanumApplicationTests {
 
 
 	}
+
+	@Test
+    @Transactional
+    public void UserTest() {
+	    userRepository.save(new User("sol", "sol@naver.com"));
+        userRepository.save(new User("jdb", "jgb@naver.com"));
+
+        List<User> list = userRepository.findAll();
+        for (User user : list){
+            System.out.println(user);
+        }
+    }
 
 }
