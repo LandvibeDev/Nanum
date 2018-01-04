@@ -1,8 +1,9 @@
 <template>
   <div id="login">
     <!--<button class="loginBtn loginBtn&#45;&#45;facebook">-->
-      <!--Login with Facebook-->
+    <!--Login with Facebook-->
     <!--</button>-->
+    <p>{{message}}</p>
     <button class="loginBtn loginBtn--google" v-on:click="googleLogin()">
       Login with Google
     </button>
@@ -18,7 +19,7 @@
     },
     data: function () {
       return {
-        message: 'this is login page hahaha'
+        message: 'this is login page'
       }
     },
     methods: {

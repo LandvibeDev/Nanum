@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.CookieGenerator;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.beans.Encoder;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @Service
 public class GoogleLoginService {
@@ -29,6 +36,9 @@ public class GoogleLoginService {
 
     @Value("${login.google.oauth-endpoint}")
     private String googleOAuthEndPoint;
+
+//    @Value("${login.google.scope-list}")
+//    private String[] googleScopeList;
 
     @Value("${login.google.scope}")
     private String googleScope;
@@ -55,7 +65,7 @@ public class GoogleLoginService {
     private String state;
 
 
-    public String getUriForCode() {
+    public String getUriForCode() throws UnsupportedEncodingException {
         // 블로그에서 가져온 것. 됨
 //        String uri = googleOAuthEndPoint + "?"
 //                + "scope=" + googleScope
@@ -63,6 +73,14 @@ public class GoogleLoginService {
 //                + "&response_type=" + googleResponseType
 //                + "&client_id=" + googleClientId
 //                + "&approval_prompt=" + googleApprovalPrompt;
+
+//        StringBuffer googleScope = new StringBuffer();
+//        for (int i=0; i<googleScopeList.length; i++){
+//            googleScope.append(googleScopeList[i] + " ");
+//        }
+//        String googleScope = "https://www.googleapis.com/auth/plus.login" + " "
+//                + "https://www.googleapis.com/auth/plus.me";
+//        String encodedScope = URLEncoder.encode(googleScope, "utf-8");
 
         // google dev 에서 가져온 것. 됨
         String uri2 = googleOAuthEndPoint + "?"
@@ -92,30 +110,36 @@ public class GoogleLoginService {
         return uri;
     }
 
-    public void login(String code){
-        // 1. code 를 받아서 2. google 에 요청 보내서 token 받음
-        RestTemplate restTemplate = new RestTemplate(); // 내부적으로 새로운 서버에 REST API 요청을 하기 위한 Rest Template 도구
+    public void login(String code, HttpSession session, CookieGenerator cookieGenerator, HttpServletResponse response)
+            throws UnsupportedEncodingException {
+        // Get code from google api server
+        RestTemplate restTemplate = new RestTemplate(); // template for REST API request
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
         String uriForToken = this.getUriForToken() + "&code=" + code;
+
+        // Get access_token, id_token, refresh_token(only once) from google api server using code
         GoogleToken googleToken = restTemplate.postForObject(uriForToken, "", GoogleToken.class);
-        // 3. access_token을 다시 보내서 user 정보 받음
+
+        // Get user information from google api server using access_token
         String uriForUserInfo = this.getUriForUserInfo()
                 + "?access_token=" + googleToken.getAccessToken();
         GoogleUser googleUser = restTemplate.getForObject(uriForUserInfo, GoogleUser.class);
 
-        // 이미 로그인 한 기록이 있는 유저이면
-        // //세션추가하고 넘억가기(세션에 들어가는 것: 유저정보, 토큰
-        GoogleUser findUser = null;
-        findUser = googleUserRepository.findBySnsId(googleUser.getSnsId());
-        if(findUser != null){
-//            System.out.println("there is already exist!" + googleUser);
-            System.out.println("there is already exist!");
-        } else {
-            // 없으면
-            // 저장
+        // Find if user already exists
+        GoogleUser user = null;
+        user = googleUserRepository.findBySnsId(googleUser.getSnsId());
+        if (user == null) {
             googleUserRepository.save(googleUser);
-        // //유저 추가 + 세션추가하고 넘어가기
-
         }
+        session.setAttribute("id", googleUser.getId());
+//        session.setAttribute("username", googleUser.getUsername());
+
+        cookieGenerator.setCookieName("sessionId");
+        cookieGenerator.addCookie(response, session.getId());
+        cookieGenerator.setCookieName("isLogin");
+        cookieGenerator.addCookie(response, "true");
+        cookieGenerator.setCookieName("username");
+        cookieGenerator.addCookie(response, URLEncoder.encode(googleUser.getUsername(), "utf-8"));
+        cookieGenerator.setCookieMaxAge(600);
     }
 }

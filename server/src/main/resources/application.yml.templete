@@ -6,6 +6,25 @@
 #    name: <username>
 #    password: <passward>
 
+#login:
+#  google:
+#    oauth-endpoint:
+#    token-endpoint:
+#    user-info-endpoint:
+##    scope-list:
+##      - https://www.googleapis.com/auth/plus.login
+##      - https://www.googleapis.com/auth/plus.me
+#    scope:
+#    include-granted-scopes:
+#    state:
+#    access-type:
+#    response-type:
+#    approval-prompt:
+#    client-id :
+#    client-secret :
+#    redirect-uri :
+#    grant-type :
+
 #spring:
 # messages:
 #   encoding: UTF-8

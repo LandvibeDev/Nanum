@@ -1,40 +1,57 @@
 <template>
   <div class="hello">
-    <NavBar></NavBar>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
 
-    <button v-on:click="login">login</button>
+    <div v-if="this.isLogined === 'true'">
+      <p> welcome {{ username }} !</p>
+      <button v-on:click="logout">logout</button>
+    </div>
+    <div v-else>
+      <button v-on:click="login">login</button>
+    </div>
 
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
   </div>
 </template>
 
 <script>
   export default {
     name: 'HelloWorld',
-    data () {
+    created: function () {
+      this.isLogined = this.getCookieValue('isLogin')
+      this.username = this.getCookieValue('username')
+      console.log(document.cookie)
+    },
+    data: function () {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        message: 'Welcome to Your Vue.js App',
+        username: ''
       }
     },
     methods: {
       login: function () {
         this.$router.push('/login')
+      },
+      logout: function () {
+        let baseUri = 'http://localhost:8080'
+        this.axios.get(`${baseUri}/logout`, this.get)
+          .then((result) => {
+            // console.log(result)
+            this.$router.go('/')
+          })
+      },
+      // Get cookieValue for cookieName
+      getCookieValue: function (cookieName) {
+        cookieName = cookieName + '='
+        let cookieData = document.cookie
+        console.log(document.cookie)
+        let start = cookieData.indexOf(cookieName)
+        let cValue = ''
+        if (start !== -1) {
+          start += cookieName.length
+          let end = cookieData.indexOf(';', start)
+          if (end === -1) end = cookieData.length
+          cValue = cookieData.substring(start, end)
+        }
+        return unescape(cValue)
       }
     }
   }
