@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import StudyList from '@/components/Study/StudyList'
-import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login/Login'
+import Home from '@/components/Home'
+import Study from '../components/Study/Study.vue'
+import StudyMain from '../components/Study/StudyMain.vue'
+import StudyBoard from '../components/Study/Board/StudyBoard.vue'
+import StudyList from '../components/Study/StudyList.vue'
+import StudyUser from '../components/Study/StudyUser.vue'
+import WriteStudyBoard from '../components/Study/Board/WriteStudyBoard.vue'
 
 Vue.use(Router)
 
@@ -11,8 +16,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Home',
+      component: Home
     },
     {
       path: '/studies',
@@ -26,7 +31,31 @@ export default new Router({
     },
     {
       path: '/logout',
-      redirect: HelloWorld
+      redirect: Home
+    },
+    {
+      path: '/studies/:studyId',
+      name: 'Study',
+      component: Study,
+      children: [
+        {
+          path: '',
+          component: StudyMain
+        },
+        {
+          path: 'board/:boardId',
+          component: StudyBoard
+        },
+        {
+          path: 'user',
+          component: StudyUser
+        },
+        {
+          path: 'writeBoard',
+          component: WriteStudyBoard
+        }
+      ]
     }
+
   ]
 })

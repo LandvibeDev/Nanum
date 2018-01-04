@@ -1,16 +1,14 @@
 package com.landvibe.nanum.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
 
 import javax.persistence.*;
 import java.util.Calendar;
 
 
 @Entity
-public class Study {
+public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +16,9 @@ public class Study {
 
     @Column
     private String title;
+
+    @Column
+    private int type;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -27,19 +28,29 @@ public class Study {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar updatedAt;
 
-//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User creator;
+    @ManyToOne(targetEntity=Study.class, fetch=FetchType.EAGER)
+    @JoinColumn(name="study_id")
+    private Study study;
 
-    public Study(){
+    public Board(){
 
     }
 
-    public Study(String title) {
+    public Board(String title,int type) {
         this.title = title;
+        this.type = type;
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
 
+    }
+
+
+    public Study getStudy() {
+        return study;
+    }
+
+    public void setStudy(Study study) {
+        this.study = study;
     }
 
     public long getId() {
@@ -58,13 +69,23 @@ public class Study {
         this.title = title;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
-        return "Study{" +
+        return "Board{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", type=" + type +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", study=" + study +
                 '}';
     }
 }

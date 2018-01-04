@@ -1,20 +1,24 @@
 <template>
-  <div class="hello">
-
-    <div v-if="this.isLogined === 'true'">
-      <p> welcome {{ username }} !</p>
-      <button v-on:click="logout">logout</button>
+  <div>
+    <div id = "home">
+      <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
+      <b-button>Code</b-button>
+      <div class="hello">
+        <div v-if="this.isLogined === 'true'">
+          <p> welcome {{ username }} !</p>
+          <b-button v-on:click="logout">logout</b-button>
+        </div>
+        <div v-else>
+          <b-button v-on:click="login">login</b-button>
+        </div>
+      </div>
     </div>
-    <div v-else>
-      <button v-on:click="login">login</button>
-    </div>
-
   </div>
 </template>
 
 <script>
   export default {
-    name: 'HelloWorld',
+    name: 'Home',
     created: function () {
       this.isLogined = this.getCookieValue('isLogin')
       this.username = this.getCookieValue('username')
@@ -27,6 +31,9 @@
       }
     },
     methods: {
+      clickButton:function(routerName){
+        this.$router.push({name:routerName})
+      },
       login: function () {
         this.$router.push('/login')
       },
@@ -57,23 +64,6 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
 
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #42b983;
-  }
 </style>
