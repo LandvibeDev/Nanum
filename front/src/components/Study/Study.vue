@@ -1,29 +1,46 @@
 <template>
   <div>
-    <b-card-group deck>
-      <b-card img-src="https://placekitten.com/1000/300"
-              img-alt="Card image"
-              img-top>
-        <p class="card-text">
-          {{ study.title }}
-        </p>
-      </b-card>
-    </b-card-group>
-  </div>
+    <StudyWidget id="widget" :studyId = "studyId"></StudyWidget>
+    <studyMenu :studyId = "studyId"></studyMenu>
+    <div id="content">
+      <router-view :study = "study"/>
+    </div>
 
+  </div>
 </template>
 
 <script>
   export default {
     name: 'Study',
-    props: ['study'],
+    created: function () {
+      this.studyId = this.$route.params.studyId
+      const baseUrl = '/api/studies/' + this.studyId
+      this.axios.get(baseUrl)
+        .then((result) => {
+          console.log(result)
+          this.study = result.data
+        })
+    },
     data: function () {
-      return {}
+      return {
+        study: {}
+      }
     }
 
   }
+
 </script>
 
-<style scoped>
+<style>
+  #content{
+    width:50%;
+    margin: 0 auto;
+  }
+
+  #widget{
+    right : 10%;
+    up : 10%;
+    position : fixed;
+  }
 
 </style>

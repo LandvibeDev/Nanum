@@ -11,34 +11,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/studies")
-public class StudyRestController {
+@RequestMapping("/api/boards")
+public class BoardRestController {
 
     private StudyService studyService;
     private BoardService boardService;
 
     @Autowired
-    public StudyRestController(StudyService studyService,BoardService boardService) {
+    public BoardRestController(StudyService studyService,BoardService boardService) {
         this.studyService = studyService;
         this.boardService = boardService;
     }
 
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Study> studies() {
-        return studyService.getAll();
+    public List<Board> boards() {
+        return boardService.getAll();
     }
 
-    @GetMapping("/{studyId}")
+    @GetMapping("/{boardId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Study study(@PathVariable long studyId) {
-        return studyService.getById(studyId);
-    }
-
-    @GetMapping("/{studyId}/boards")
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<Board> board(@PathVariable long studyId) {
-        return boardService.getByStudy(studyId);
+    public Board board(@PathVariable long boardId) {
+        return boardService.getById(boardId);
     }
 
 }

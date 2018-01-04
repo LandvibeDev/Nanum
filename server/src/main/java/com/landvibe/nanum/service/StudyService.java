@@ -20,4 +20,8 @@ public class StudyService {
     public List<Study> getAll(){
         return studyRepository.findAll();
     }
+
+    public Study getById(long id){
+        return studyRepository.findById(id);
+    }
 }
