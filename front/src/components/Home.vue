@@ -2,8 +2,7 @@
   <div>
     <div id = "home">
       <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
-      <b-button>Blog</b-button>
-      <b-button>Code</b-button>
+      <b-button v-on:click = "clickButton('Code')">Code</b-button>
     </div>
   </div>
 </template>

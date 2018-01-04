@@ -7,6 +7,7 @@ import StudyBoard from '../components/Study/Board/StudyBoard.vue'
 import StudyList from '../components/Study/StudyList.vue'
 import StudyUser from '../components/Study/StudyUser.vue'
 import WriteStudyBoard from '../components/Study/Board/WriteStudyBoard.vue'
+import Code from '../components/Code/Code.vue'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/code',
+      name: 'Code',
+      component: Code
     },
     {
       path: '/studies',

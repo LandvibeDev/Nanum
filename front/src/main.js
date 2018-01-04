@@ -16,6 +16,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
+
 Vue.component('NavBar', NavBar)
 Vue.component('StudyMenu', StudyMenu)
 Vue.component('StudyItem', StudyItem)
