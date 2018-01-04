@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '@/components/Login/Login'
 import Home from '@/components/Home'
 import Study from '../components/Study/Study.vue'
 import StudyMain from '../components/Study/StudyMain.vue'
@@ -22,6 +23,15 @@ export default new Router({
       path: '/studies',
       name: 'StudyList',
       component: StudyList
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/logout',
+      redirect: Home
     },
     {
       path: '/studies/:studyId',
