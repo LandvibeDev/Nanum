@@ -1,37 +1,29 @@
 <template>
   <div>
-    <div>
-      <b-form-input v-model="name"
-                    type="text"
-                    placeholder="Enter name"></b-form-input>
-      <b-form-select v-model="selected" :options="options" class="mb-3">
-      </b-form-select>
-    </div>
-    <b-button variant="danger">Make</b-button>
-  </div>
+    <md-steppers>
+      <md-step id="first" md-label="First Step">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+      </md-step>
 
+      <md-step id="second" md-label="Second Step">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+      </md-step>
+
+      <md-step id="third" md-label="Third Step">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias doloribus eveniet quaerat modi cumque quos sed, temporibus nemo eius amet aliquid, illo minus blanditiis tempore, dolores voluptas dolore placeat nulla.</p>
+      </md-step>
+    </md-steppers>
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'Study',
-    props: ['study'],
-    data: function () {
-      return {
-        name:"",
-        selected: null,
-        options: [
-          { value: null, text: 'select template' },
-          { value: 'posts', text: 'posts' },
-          { value: 'code', text: 'code' },
-          { value: 'issue', text: 'issue' }
-        ]
-      }
-    }
-
+    name: 'StepperHorizontal'
   }
 </script>
-
-<style scoped>
-
-</style>

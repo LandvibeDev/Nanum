@@ -1,68 +1,126 @@
 <template>
   <div>
+    <div class="viewport">
+      <md-toolbar :md-elevation="1">
+        <span class="md-title">Default</span>
+      </md-toolbar>
 
-    <b-card-group columns>
-      <b-card title="Card title that wraps to a new line"
-              img-src="https://placekitten.com/g/400/450"
-              img-fluid
-              img-alt="image"
-              img-top>
-        <p class="card-text">
-          This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit
-          longer.
-        </p>
-      </b-card>
-      <b-card header="Quote">
-        <blockquote class="blockquote mb-0">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-          <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-        </blockquote>
-      </b-card>
-      <b-card title="Title"
-              img-src="https://placekitten.com/500/350"
-              img-fluid
-              img-alt="image"
-              img-top>
-        <p class="card-text">
-          This card has supporting text below as a natural lead-in to additional content.
-        </p>
-        <small class="text-muted">Last updated 3 mins ago</small>
-      </b-card>
-      <b-card bg-variant="primary"
-              text-variant="white">
-        <blockquote class="card-blockquote">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-          </p>
-          <footer>
-            <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-          </footer>
-        </blockquote>
-      </b-card>
-      <b-card title="Title">
-        <p class="card-text">
-          This card has supporting text below as a natural lead-in to additional content.
-        </p>
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-      </b-card>
-      <b-card img-src="https://lorempixel.com/400/400/"
-              img-fluid
-              img-alt="image"
-              overlay>
-      </b-card>
-      <b-card img-src="https://lorempixel.com/400/200/"
-              img-fluid
-              img-alt="image"
-              img-top>
-        <p class="card-text">
-          This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content
-          than the first.
-        </p>
-        <div slot="footer">
-          <small class="text-muted">Footer Text</small>
-        </div>
-      </b-card>
-    </b-card-group>
+      <md-list class="md-double-line">
+        <md-subheader>Phone</md-subheader>
+
+        <md-list-item>
+          <md-icon class="md-primary">phone</md-icon>
+
+          <div class="md-list-item-text">
+            <span>(650) 555-1234</span>
+            <span>Mobile</span>
+          </div>
+
+          <md-button class="md-icon-button md-list-action">
+            <md-icon>sms</md-icon>
+          </md-button>
+        </md-list-item>
+
+        <md-list-item class="md-inset">
+          <div class="md-list-item-text">
+            <span>(650) 555-1234</span>
+            <span>Mobile</span>
+          </div>
+
+          <md-button class="md-icon-button md-list-action">
+            <md-icon>sms</md-icon>
+          </md-button>
+        </md-list-item>
+
+        <md-divider></md-divider>
+        <md-subheader>Email</md-subheader>
+
+        <md-list-item>
+          <md-icon class="md-primary">email</md-icon>
+
+          <div class="md-list-item-text">
+            <span>aliconnors@example.com</span>
+            <span>Personal</span>
+          </div>
+        </md-list-item>
+
+        <md-list-item class="md-inset">
+          <div class="md-list-item-text">
+            <span>ali_connors@example.com</span>
+            <span>Work</span>
+          </div>
+        </md-list-item>
+      </md-list>
+    </div>
+
+    <div class="viewport">
+      <md-toolbar :md-elevation="1">
+        <span class="md-title">Primary</span>
+      </md-toolbar>
+
+      <md-list>
+        <md-subheader class="md-primary">Navigation</md-subheader>
+
+        <md-list-item>
+          <md-icon>move_to_inbox</md-icon>
+          <span class="md-list-item-text">Inbox</span>
+        </md-list-item>
+
+        <md-list-item>
+          <md-icon>send</md-icon>
+          <span class="md-list-item-text">Sent Mail</span>
+        </md-list-item>
+
+        <md-list-item>
+          <md-icon>delete</md-icon>
+          <span class="md-list-item-text">Trash</span>
+        </md-list-item>
+
+        <md-list-item>
+          <md-icon>error</md-icon>
+          <span class="md-list-item-text">Spam</span>
+        </md-list-item>
+
+        <md-divider class="md-inset"></md-divider>
+        <md-subheader class="md-primary">Contacts</md-subheader>
+
+        <md-list-item>
+          <md-avatar>
+            <img src="https://placeimg.com/40/40/people/5" alt="People">
+          </md-avatar>
+
+          <span class="md-list-item-text">Abbey Christansen</span>
+
+          <md-button class="md-icon-button md-list-action">
+            <md-icon class="md-primary">chat_bubble</md-icon>
+          </md-button>
+        </md-list-item>
+
+        <md-list-item>
+          <md-avatar>
+            <img src="https://placeimg.com/40/40/people/1" alt="People">
+          </md-avatar>
+
+          <span class="md-list-item-text">Alex Nelson</span>
+
+          <md-button class="md-icon-button md-list-action">
+            <md-icon class="md-primary">chat_bubble</md-icon>
+          </md-button>
+        </md-list-item>
+
+        <md-list-item>
+          <md-avatar>
+            <img src="https://placeimg.com/40/40/people/6" alt="People">
+          </md-avatar>
+
+          <span class="md-list-item-text">Mary Johnson</span>
+
+          <md-button class="md-icon-button md-list-action">
+            <md-icon>chat_bubble</md-icon>
+          </md-button>
+        </md-list-item>
+      </md-list>
+    </div>
   </div>
 </template>
 

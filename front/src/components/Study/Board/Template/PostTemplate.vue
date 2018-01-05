@@ -1,83 +1,77 @@
 <template>
   <div>
+    <md-table v-model="users" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort" md-card>
+      <md-table-toolbar>
+        <h1 class="md-title">Users</h1>
+      </md-table-toolbar>
 
-    <b-card title="Card title"
-            sub-title="Card subtitle">
-      <p class="card-text">
-        일일 과제 : 영어단어 <em>10개</em>
-      </p>
-      <b-btn v-b-modal.modalPrevent>Launch demo modal</b-btn>
-      <!-- Main UI -->
-      <div class="mt-3 mb-3">
-        Submitted Names:
-        <ul>
-          <li v-for="n in names">{{n}}</li>
-        </ul>
-      </div>
-      <!-- Modal Component -->
-      <b-modal id="modalPrevent"
-               ref="modal"
-               title="Submit your name"
-               @ok="handleOk"
-               @shown="clearName">
-        <form @submit.stop.prevent="handleSubmit">
-          <b-form-group horizontal
-                        label="apple:"
-                        label-class="text-sm-right">
-            <b-form-input type="text"
-                          v-model="name"></b-form-input>
-          </b-form-group>
-          <b-form-group horizontal
-                        label="street:"
-                        label-class="text-sm-right">
-            <b-form-input type="text"
-                          v-model="name"></b-form-input>
-          </b-form-group>
-        </form>
-      </b-modal>
-    </b-card>
-    <b-card title="Card title"
-            sub-title="Card subtitle">
-      <p class="card-text">
-        WHAT
-      </p>
-    </b-card>
-
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell md-label="ID" md-numeric>{{ item.id }}</md-table-cell>
+        <md-table-cell md-label="Name" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell md-label="Email" md-sort-by="email">{{ item.email }}</md-table-cell>
+        <md-table-cell md-label="Gender" md-sort-by="gender">{{ item.gender }}</md-table-cell>
+        <md-table-cell md-label="Job Title" md-sort-by="title">{{ item.title }}</md-table-cell>
+      </md-table-row>
+    </md-table>
   </div>
 </template>
 
 <script>
   export default {
-    props: ['study'],
-    data () {
-      return {
-        name: '',
-        names: []
-      }
-    },
-    methods: {
-      clearName () {
-        this.name = ''
-      },
-      handleOk (evt) {
-        // Prevent modal from closing
-        evt.preventDefault()
-        if (!this.name) {
-          alert('Please enter your name')
-        } else {
-          this.handleSubmit()
+    name: 'TableCustomSort',
+    data: () => ({
+      currentSort: 'name',
+      currentSortOrder: 'asc',
+      users: [
+        {
+          id: 1,
+          name: 'Shawna Dubbin',
+          email: 'sdubbin0@geocities.com',
+          gender: 'Male',
+          title: 'Assistant Media Planner'
+        },
+        {
+          id: 2,
+          name: 'Odette Demageard',
+          email: 'odemageard1@spotify.com',
+          gender: 'Female',
+          title: 'Account Coordinator'
+        },
+        {
+          id: 3,
+          name: 'Lonnie Izkovitz',
+          email: 'lizkovitz3@youtu.be',
+          gender: 'Female',
+          title: 'Operator'
+        },
+        {
+          id: 4,
+          name: 'Thatcher Stave',
+          email: 'tstave4@reference.com',
+          gender: 'Male',
+          title: 'Software Test Engineer III'
+        },
+        {
+          id: 5,
+          name: 'Clarinda Marieton',
+          email: 'cmarietonh@theatlantic.com',
+          gender: 'Female',
+          title: 'Paralegal'
         }
-      },
-      handleSubmit () {
-        this.names.push(this.name)
-        this.clearName()
-        this.$refs.modal.hide()
+      ]
+    }),
+    methods: {
+      customSort (value) {
+        return value.sort((a, b) => {
+          const sortBy = this.currentSort
+
+          if (this.currentSortOrder === 'desc') {
+            return a[sortBy].localeCompare(b[sortBy])
+          }
+
+          return b[sortBy].localeCompare(a[sortBy])
+        })
       }
     }
   }
 </script>
-
-<style scoped>
-
-
-</style>
