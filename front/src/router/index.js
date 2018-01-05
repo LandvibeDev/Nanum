@@ -8,6 +8,12 @@ import StudyBoard from '../components/Study/Board/StudyBoard.vue'
 import StudyList from '../components/Study/StudyList.vue'
 import StudyUser from '../components/Study/StudyUser.vue'
 import WriteStudyBoard from '../components/Study/Board/WriteStudyBoard.vue'
+import Issue from '../components/Issue/Issue'
+import IssueMain from '../components/Issue/IssueMain'
+import IssueList from '../components/Issue/IssueList'
+import IssueItem from '../components/Issue/IssueItem'
+// import IssueBoard from '../components/Issue/Board/IssueBoard'
+// import IssueBoardItem from '../components/Issue/Board/IssueBoardItem'
 
 Vue.use(Router)
 
@@ -54,8 +60,32 @@ export default new Router({
           path: 'writeBoard',
           component: WriteStudyBoard
         }
+        // {
+        //   path: '/issues',
+        //   name: 'Issue',
+        //   component: Issue,
+        //   children: [
+        //   ]
+        // }
+      ]
+    },
+    {
+      path: '/issues',
+      name: 'IssueList',
+      component: IssueList,
+      children: [
+        {
+          path: '/:issueId',
+          name: 'Issue',
+          component: Issue,
+          children: [
+            {
+              path: '',
+              component: IssueMain
+            }
+          ]
+        },
       ]
     }
-
   ]
 })

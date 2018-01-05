@@ -3,6 +3,7 @@
     <div id = "home">
       <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
       <b-button>Code</b-button>
+      <b-button v-on:click = "clickButton('IssueList')">Issue</b-button>
       <div class="hello">
         <div v-if="this.isLogined === 'true'">
           <p> welcome {{ username }} !</p>

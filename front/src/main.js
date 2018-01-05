@@ -11,6 +11,10 @@ import StudyItem from './components/Study/StudyItem.vue'
 import StudyMenu from './components/Study/StudyMenu.vue'
 import StudyWidget from './components/Study/StudyWidget.vue'
 import PostTemplate from './components/Study/Board/Template/PostTemplate.vue'
+// import Issue from './components/Issue/Issue'
+import IssueList from './components/Issue/IssueList'
+import IssueItem from './components/Issue/IssueItem'
+// import IssueMain from './components/Issue/IssueMain'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -22,6 +26,8 @@ Vue.component('StudyMenu', StudyMenu)
 Vue.component('StudyItem', StudyItem)
 Vue.component('StudyWidget', StudyWidget)
 Vue.component('PostTemplate', PostTemplate)
+Vue.component('IssueList', IssueList)
+Vue.component('IssueItem', IssueItem)
 Vue.use(BootstrapVue)
 Vue.use(Vuex)
 
