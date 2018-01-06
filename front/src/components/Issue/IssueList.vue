@@ -34,7 +34,7 @@
           // searchedObj[date] = this.issues[date].filter((issue) => {
           this.searchedIssues[date] = this.issues[date].filter((issue) => {
             return searchRegex.test(issue.title) ||
-              searchRegex.test(issue.teaser) ||
+              searchRegex.test(issue.content) ||
               searchRegex.test(issue.createdAt) ||
               searchRegex.test(date)
           })
@@ -64,57 +64,30 @@
       }
     },
     created: function () {
-      // const baseUrl = '/api/issues/'
-      // this.axios.get(baseUrl)
-      //   .then((result) => {
-      //     console.log(result)
-      //     this.issues = result.data
-      //   })
-      this.issues = {
-        'September, 2016': [
-          {
-            'id': 1,
-            'title': 'Five',
-            'slug': 'five',
-            'teaser': 'five',
-            'createdAt': '30.09.2016.'
-          },
-          {
-            'id': 2,
-            'title': 'Four',
-            'slug': 'four',
-            'teaser': 'four',
-            'createdAt': '15.09.2016.'
-          }
-        ],
-        '2016, April': [
-          {
-            'id': 3,
-            title: 'Three',
-            slug: 'three',
-            teaser: 'three',
-            createdAt: '14.04.2016.'
-          }
-        ],
-        'March,2016': [
-          {
-            'id': 4,
-            title: 'a',
-            slug: 'a',
-            teaser: 'a',
-            createdAt: '14.03.2016.'
-          }
-        ],
-        '2017-12': [
-          {
-            'id': 5,
-            'title': 'a',
-            'slug': 'a',
-            'teaser': 'a',
-            'createdAt': '14.02.2017.'
-          }
-        ]
-      }
+      const baseUrl = '/api/issues'
+      this.axios.get(baseUrl)
+        .then((result) => {
+          console.log(result)
+          this.issues = result.data
+        })
+      // this.issues = {
+      //   'September, 2016': [
+      //     {
+      //       'id': 1,
+      //       'title': 'Five',
+      //       'slug': 'five',
+      //       'teaser': 'five',
+      //       'createdAt': '30.09.2016.'
+      //     },
+      //     {
+      //       'id': 2,
+      //       'title': 'Four',
+      //       'slug': 'four',
+      //       'teaser': 'four',
+      //       'createdAt': '15.09.2016.'
+      //     }
+      //   ]
+      // }
     }
   }
 </script>

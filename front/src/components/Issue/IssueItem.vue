@@ -2,9 +2,9 @@
   <div>
     <b-media v-on:click="clickIssue">
       <p class='issue-date'>{{ issue.createdAt }}</p>
-      <p>{{ issue.slug }}</p>
-      <h3>{{ issue.title }}</h3>
-      <p>{{ issue.teaser }}</p>
+      <p> id: {{ issue.id }}</p>
+      <h3> title: {{ issue.title }}</h3>
+      <p> content: {{ issue.content }}</p>
     </b-media>
   </div>
 </template>
