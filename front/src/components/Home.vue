@@ -17,11 +17,12 @@
 </template>
 
 <script>
+
   export default {
     name: 'Home',
     created: function () {
       this.isLogined = this.getCookieValue('isLogin')
-      this.username =  decodeURIComponent(this.getCookieValue('username'))
+      this.username =  this.getCookieValue('username')
 
       console.log(document.cookie)
     },
@@ -59,12 +60,15 @@
           if (end === -1) end = cookieData.length
           cValue = cookieData.substring(start, end)
         }
-        return cValue
+        return decodeURIComponent(cValue)
       }
     }
   }
 </script>
 
 <style scoped>
+  #home{
+    margin-top: 60px;
+  }
 
 </style>
