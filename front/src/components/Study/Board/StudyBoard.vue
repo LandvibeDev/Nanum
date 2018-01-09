@@ -17,7 +17,10 @@
 </template>
 
 <script>
+  import PostTemplate from './Template/PostTemplate.vue'
+
   export default {
+    components:{PostTemplate},
     props: ['study'],
     created:function(){
       this.type = this.$store.state.type

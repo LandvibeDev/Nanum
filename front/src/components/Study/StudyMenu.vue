@@ -10,6 +10,7 @@
 
 <script>
   export default {
+    name: 'StudyMenu',
     props: ['studyId'],
     created: function () {
       const baseUrl = '/api/studies/'+this.studyId+'/boards'

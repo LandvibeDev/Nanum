@@ -10,7 +10,11 @@
 </template>
 
 <script>
+  import StudyMenu from './StudyMenu.vue'
+  import StudyWidget from './StudyWidget.vue'
+
   export default {
+    components:{StudyMenu,StudyWidget},
     name: 'Study',
     created: function () {
       this.studyId = this.$route.params.studyId

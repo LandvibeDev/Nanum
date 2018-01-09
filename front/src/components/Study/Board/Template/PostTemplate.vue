@@ -18,7 +18,7 @@
 
 <script>
   export default {
-    name: 'TableCustomSort',
+    name: 'PostTemplate',
     data: () => ({
       currentSort: 'name',
       currentSortOrder: 'asc',

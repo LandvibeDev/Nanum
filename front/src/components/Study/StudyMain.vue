@@ -126,6 +126,7 @@
 
 <script>
   export default {
+    name : 'StudyMain',
     props: ['study']
   }
 </script>

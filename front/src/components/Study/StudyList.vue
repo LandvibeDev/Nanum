@@ -7,8 +7,11 @@
 </template>
 
 <script>
+  import StudyItem from './StudyItem.vue'
+
   export default {
-    name: 'studyList',
+    components:{StudyItem},
+    name: 'StudyList',
     created: function () {
       const baseUrl = '/api/studies/'
       this.axios.get(baseUrl)

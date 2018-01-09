@@ -32,7 +32,7 @@
 
 <script>
   export default {
-    name: 'Study',
+    name: 'StudyItem',
     props: ['study'],
     data: function () {
       return {}

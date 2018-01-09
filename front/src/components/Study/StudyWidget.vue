@@ -8,6 +8,7 @@
 
 <script>
   export default {
+    name : 'StudyWidget',
     props: ["studyId"],
     methods:{
       clickWidget:function(routerPath){

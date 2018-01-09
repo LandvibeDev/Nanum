@@ -126,6 +126,7 @@
 
 <script>
   export default {
+    name : 'StudyUser',
     props: ['study']
   }
 </script>
