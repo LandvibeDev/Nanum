@@ -26,9 +26,7 @@
         study: {}
       }
     }
-
   }
-
 </script>
 
 <style>

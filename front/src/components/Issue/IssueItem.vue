@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <b-media v-on:click="clickIssue">
+  <div v-on:click="clickIssue">
       <p class='issue-date'>{{ issue.createdAt }}</p>
       <p> id: {{ issue.id }}</p>
       <h3> title: {{ issue.title }}</h3>
       <p> content: {{ issue.content }}</p>
-    </b-media>
   </div>
 </template>
 
@@ -18,8 +16,7 @@
     },
     methods: {
       clickIssue: function () {
-        // this.$router.push({name:"Study",params:{id:this.study.id}})
-        this.$router.push('/issues/' + this.issue.id)
+        this.$router.push('/issues/' + this.issue.id) // -> /issues/new
       }
     }
   }

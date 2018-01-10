@@ -3,7 +3,7 @@
     <div id = "home">
       <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
       <b-button>Code</b-button>
-      <b-button v-on:click = "clickButton('IssueList')">Issue</b-button>
+      <b-button v-on:click = "clickButton('IssueContainer')">Issue</b-button>
       <div class="hello">
         <div v-if="this.isLogined === 'true'">
           <p> welcome {{ username }} !</p>
@@ -32,8 +32,8 @@
       }
     },
     methods: {
-      clickButton:function(routerName){
-        this.$router.push({name:routerName})
+      clickButton: function (routerName) {
+        this.$router.push({ name: routerName })
       },
       login: function () {
         this.$router.push('/login')
@@ -50,7 +50,7 @@
       getCookieValue: function (cookieName) {
         cookieName = cookieName + '='
         let cookieData = document.cookie
-        console.log(document.cookie)
+        // console.log(document.cookie)
         let start = cookieData.indexOf(cookieName)
         let cValue = ''
         if (start !== -1) {

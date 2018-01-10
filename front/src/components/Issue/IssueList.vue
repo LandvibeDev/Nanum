@@ -1,5 +1,6 @@
 <template id='issue-template'>
   <div class='container'>
+    <button v-on:click="clickIssueCreate()">Create Issue</button>
     <input v-model='searchQuery' class='search-box' placeholder='Search for issues...'>
     <div class='timeline' v-if='anyIssue()'>
       <div v-for='(dateWithIssues, date) in searchIssues'>
@@ -7,9 +8,6 @@
         <div v-for='issue in dateWithIssues' class='issue'>
           <span class='dot'></span>
           <IssueItem :issue="issue"></IssueItem>
-          <!--<p class='issue-date'>{{ issue.createdAt }}</p>-->
-          <!--<h3><a :href="'/issues/' + issue.slug">{{ issue.title }}</a></h3>-->
-          <!--<p>{{ issue.teaser }}</p>-->
         </div>
       </div>
     </div>
@@ -44,15 +42,18 @@
       }
     },
     methods: {
-      anyIssue () {
+      anyIssue: function () {
         return this.countAllIssues() > 0
       },
-      countAllIssues () {
+      countAllIssues: function () {
         let count = 0
         for (let date in this.searchIssues) {
           count += this.searchIssues[date].length
         }
         return count
+      },
+      clickIssueCreate: function () {
+        this.$router.push('/issues/new')
       }
     },
     data: function () {

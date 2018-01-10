@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login/Login'
-import Home from '@/components/Home'
+import Login from '../components/Login/Login.vue'
+import Home from '../components/Home.vue'
 import Study from '../components/Study/Study.vue'
 import StudyMain from '../components/Study/StudyMain.vue'
 import StudyBoard from '../components/Study/Board/StudyBoard.vue'
 import StudyList from '../components/Study/StudyList.vue'
 import StudyUser from '../components/Study/StudyUser.vue'
 import WriteStudyBoard from '../components/Study/Board/WriteStudyBoard.vue'
-import Issue from '../components/Issue/Issue'
-import IssueMain from '../components/Issue/IssueMain'
-import IssueList from '../components/Issue/IssueList'
-import IssueItem from '../components/Issue/IssueItem'
+import IssueContainer from '../components/Issue/IssueContainer.vue'
+import Issue from '../components/Issue/Issue.vue'
+import IssueList from '../components/Issue/IssueList.vue'
+import IssueItem from '../components/Issue/IssueItem.vue'
+import IssueTemplate from '../components/Issue/IssueTemplate.vue'
 // import IssueBoard from '../components/Issue/Board/IssueBoard'
 // import IssueBoardItem from '../components/Issue/Board/IssueBoardItem'
 
@@ -60,31 +61,35 @@ export default new Router({
           path: 'writeBoard',
           component: WriteStudyBoard
         }
-        // {
-        //   path: '/issues',
-        //   name: 'Issue',
-        //   component: Issue,
-        //   children: [
-        //   ]
-        // }
       ]
     },
     {
       path: '/issues',
-      name: 'IssueList',
-      component: IssueList,
+      name: 'IssueContainer',
+      component: IssueContainer,
       children: [
         {
-          path: '/:issueId',
-          name: 'Issue',
-          component: Issue,
+          path: '',
+          name: IssueList,
+          component: IssueList,
           children: [
             {
               path: '',
-              component: IssueMain
+              name: 'IssueItem',
+              component: IssueItem
             }
           ]
         },
+        {
+          path: 'new',
+          name: 'IssueTemplate',
+          component: IssueTemplate
+        },
+        {
+          path: ':issueId',
+          name: 'Issue',
+          component: Issue
+        }
       ]
     }
   ]
