@@ -129,9 +129,9 @@ public class GoogleLoginService {
 
         // Find if user already exists
         User user = null;
-        user = userRepository.findBySnsIdentity(loginUser.getSnsIdentity());
+        user = userRepository.findByEmail(loginUser.getEmail());
         if (user == null) {
-            userRepository.save(loginUser);
+            userRepository.saveAndFlush(loginUser);
         }
         session.setAttribute("userId", loginUser.getId());
 //        session.setAttribute("username", googleUser.getUsername());

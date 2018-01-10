@@ -64,7 +64,7 @@ public class NanumApplicationTests {
     @Transactional
     public void UserTest() {
 		User user = new User("sol", "sol@nvarer.com");
-		user.setSnsIdentity("288249");
+		user.setSns("288249");
 		userRepository.save(user);
 
 //        List<User> list = userRepository.findAll();

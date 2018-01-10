@@ -7,7 +7,7 @@
     <p>content: {{issue.content}}</p>
     <p>createdAt: {{issue.createdAt}}</p>
     <p>updatedAt: {{issue.updatedAt}}</p>
-    <p>user: {{issue.user}}</p>
+    <p>user: {{issue.creator}}</p>
     <p>Issue!</p>
   </div>
 </template>

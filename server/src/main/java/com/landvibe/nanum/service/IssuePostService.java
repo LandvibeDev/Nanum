@@ -5,6 +5,7 @@ import com.landvibe.nanum.model.User;
 import com.landvibe.nanum.model.post.IssuePost;
 import com.landvibe.nanum.model.post.Post;
 import com.landvibe.nanum.repository.IssuePostRepository;
+import com.landvibe.nanum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +20,22 @@ import java.util.List;
 public class IssuePostService {
 
     private IssuePostRepository issuePostRepository;
-//    private GoogleUserRepository googleUserRepository;
+    private UserRepository userRepository;
 
-    public IssuePostService(IssuePostRepository issuePostRepository) {
+    public IssuePostService(IssuePostRepository issuePostRepository, UserRepository userRepository) {
         this.issuePostRepository = issuePostRepository;
+        this.userRepository = userRepository;
     }
 
     public HashMap<String, List<IssuePost>> getAll() {
-        List<IssuePost> issuePostList = issuePostRepository.findAll();
+        List<IssuePost> issuePostList = null;
+        issuePostList = issuePostRepository.findAll();
 //        HashMap<String, IssuePost> issuePostMap= new HashMap<String, IssuePost>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         HashMap<String, List<IssuePost>> issuePostMap = new HashMap<>();
         String dateTime, nextDateTime;
         if (!issuePostList.isEmpty()) {
+//        if(issuePostList != null) {
             dateTime = dateFormat.format(issuePostList.get(0).getCreatedAt().getTime());
 //            System.out.println("dateTime: " + dateTime);
             List<IssuePost> issuePostListOrderedByDate = new ArrayList<>();
@@ -56,19 +60,20 @@ public class IssuePostService {
         return issuePostRepository.findById(id);
     }
 
-    public List<IssuePost> getAllByUserUid(long id) {
-        return issuePostRepository.findAllByUserId(id);
-    }
+//    public List<IssuePost> getAllByUserUid(long id) {
+//        return issuePostRepository.findAllByUserId(id);
+//    }
 
     public IssuePost create(HttpSession session, IssuePost issuePost) {
 //        System.out.println("session: " + session);
 //        GoogleUser creator = googleUserRepository.findOne((long) session.getAttribute("userId"));
-        User creator = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
+        User creator = userRepository.findByEmail(user.getEmail());
 //        System.out.println("creator: " + creator.getEmail());
 //        Object obj = session.getAttribute("user");
 //        System.out.println("obj: " + obj);
 
-        issuePost.setUser(creator);
+        issuePost.setCreator(creator);
         return issuePostRepository.save(issuePost);
     }
 
