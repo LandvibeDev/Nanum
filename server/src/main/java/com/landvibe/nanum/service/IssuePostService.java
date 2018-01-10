@@ -1,10 +1,14 @@
 package com.landvibe.nanum.service;
 
+import com.landvibe.nanum.model.GoogleUser;
+import com.landvibe.nanum.model.User;
 import com.landvibe.nanum.model.post.IssuePost;
+import com.landvibe.nanum.model.post.Post;
 import com.landvibe.nanum.repository.IssuePostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +19,7 @@ import java.util.List;
 public class IssuePostService {
 
     private IssuePostRepository issuePostRepository;
+//    private GoogleUserRepository googleUserRepository;
 
     public IssuePostService(IssuePostRepository issuePostRepository) {
         this.issuePostRepository = issuePostRepository;
@@ -33,7 +38,7 @@ public class IssuePostService {
             for (IssuePost issue : issuePostList) {
                 nextDateTime = dateFormat.format(issue.getCreatedAt().getTime());
 //                System.out.println("nextDateTime: " + nextDateTime);
-                if (dateTime.equals(nextDateTime)){
+                if (dateTime.equals(nextDateTime)) {
                     issuePostListOrderedByDate.add(issue);
                 } else {
                     issuePostMap.put(dateTime, issuePostListOrderedByDate);
@@ -51,8 +56,20 @@ public class IssuePostService {
         return issuePostRepository.findById(id);
     }
 
-    public List<IssuePost> getAllByUserId(long id) {
+    public List<IssuePost> getAllByUserUid(long id) {
         return issuePostRepository.findAllByUserId(id);
+    }
+
+    public IssuePost create(HttpSession session, IssuePost issuePost) {
+//        System.out.println("session: " + session);
+//        GoogleUser creator = googleUserRepository.findOne((long) session.getAttribute("userId"));
+        User creator = (User) session.getAttribute("user");
+//        System.out.println("creator: " + creator.getEmail());
+//        Object obj = session.getAttribute("user");
+//        System.out.println("obj: " + obj);
+
+        issuePost.setUser(creator);
+        return issuePostRepository.save(issuePost);
     }
 
     // getAllByProjectId

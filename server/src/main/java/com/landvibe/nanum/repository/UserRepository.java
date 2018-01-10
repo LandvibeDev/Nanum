@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findById(Long id);
+//    User findById(long id);
+    User findBySnsIdentity(String snsIdentity);
 }

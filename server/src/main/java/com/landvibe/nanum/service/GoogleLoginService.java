@@ -2,7 +2,8 @@ package com.landvibe.nanum.service;
 
 import com.landvibe.nanum.model.GoogleToken;
 import com.landvibe.nanum.model.GoogleUser;
-import com.landvibe.nanum.repository.GoogleUserRepository;
+import com.landvibe.nanum.model.User;
+import com.landvibe.nanum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -20,7 +21,7 @@ import java.net.URLEncoder;
 public class GoogleLoginService {
 
     @Autowired
-    GoogleUserRepository googleUserRepository;
+    UserRepository userRepository;
 
     @Value("${login.google.client-id}")
     private String googleClientId;
@@ -123,23 +124,25 @@ public class GoogleLoginService {
         // Get user information from google api server using access_token
         String uriForUserInfo = this.getUriForUserInfo()
                 + "?access_token=" + googleToken.getAccessToken();
-        GoogleUser googleUser = restTemplate.getForObject(uriForUserInfo, GoogleUser.class);
+//        GoogleUser googleUser = restTemplate.getForObject(uriForUserInfo, GoogleUser.class);
+        User loginUser = restTemplate.getForObject(uriForUserInfo, GoogleUser.class);
 
         // Find if user already exists
-        GoogleUser user = null;
-        user = googleUserRepository.findBySnsId(googleUser.getSnsId());
+        User user = null;
+        user = userRepository.findBySnsIdentity(loginUser.getSnsIdentity());
         if (user == null) {
-            googleUserRepository.save(googleUser);
+            userRepository.save(loginUser);
         }
-        session.setAttribute("id", googleUser.getId());
+        session.setAttribute("userId", loginUser.getId());
 //        session.setAttribute("username", googleUser.getUsername());
+        session.setAttribute("user", loginUser);
 
-        cookieGenerator.setCookieName("sessionId");
-        cookieGenerator.addCookie(response, session.getId());
+//        cookieGenerator.setCookieName("sessionId");
+//        cookieGenerator.addCookie(response, session.getId());
         cookieGenerator.setCookieName("isLogin");
         cookieGenerator.addCookie(response, "true");
         cookieGenerator.setCookieName("username");
-        cookieGenerator.addCookie(response, URLEncoder.encode(googleUser.getUsername(), "utf-8"));
+        cookieGenerator.addCookie(response, URLEncoder.encode(loginUser.getUsername(), "utf-8"));
         cookieGenerator.setCookieMaxAge(600);
     }
 }

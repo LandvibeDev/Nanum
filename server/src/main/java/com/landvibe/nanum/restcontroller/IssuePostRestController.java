@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +24,17 @@ public class IssuePostRestController {
         this.issuePostService = issuePostService;
     }
 
-    // getAllIssueByUserId
+    // TODO: getAllIssueByUserId
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)
     public HashMap<String, List<IssuePost>> getAllIssuePost() {
         return issuePostService.getAll();
+    }
+
+    @PostMapping("")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public IssuePost createIssuePost(HttpSession session, @RequestBody IssuePost issuePost) {
+        return issuePostService.create(session, issuePost);
     }
 
     @GetMapping("/{issueId}")
@@ -36,15 +43,9 @@ public class IssuePostRestController {
         return issuePostService.getById(issueId);
     }
 
+    // TODO:
     // getIssuePostByUserId
     // getIssuePostByProjectId
     // getIssuePostByUserIdAndPostId
-    // createIssuePost
-    @PostMapping("")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public void createIssuePost() {
-        // issuePostSerice.create();
-    }
-
 
 }
