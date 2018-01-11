@@ -28,9 +28,9 @@ public class Board {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar updatedAt;
 
-    @ManyToOne(targetEntity=Study.class, fetch=FetchType.EAGER)
-    @JoinColumn(name="study_id")
-    private Study study;
+    @ManyToOne(targetEntity=Project.class, fetch=FetchType.EAGER)
+    @JoinColumn(name="project_id")
+    private Project project;
 
     public Board(){
 
@@ -45,12 +45,12 @@ public class Board {
     }
 
 
-    public Study getStudy() {
-        return study;
+    public Project getProject() {
+        return project;
     }
 
-    public void setStudy(Study study) {
-        this.study = study;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public long getId() {
@@ -85,7 +85,7 @@ public class Board {
                 ", type=" + type +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", study=" + study +
+                ", project=" + project +
                 '}';
     }
 }

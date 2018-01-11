@@ -8,11 +8,11 @@
 
 <script>
   export default {
-    name : 'StudyWidget',
-    props: ["studyId"],
+    name : 'ProjectWidget',
+    props: ["projectId"],
     methods:{
       clickWidget:function(routerPath){
-        const basePath = '/studies/' + this.studyId
+        const basePath = '/projects/' + this.projectId
         this.$router.push(basePath + routerPath)
       }
     }

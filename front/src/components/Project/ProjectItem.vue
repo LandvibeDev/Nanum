@@ -8,12 +8,12 @@
       </md-card-media>
 
       <md-card-header-text >
-        <div class="md-title">{{ study.title }}</div>
-        <div class="md-subhead">{{ study.createdAt }}</div>
+        <div class="md-title">{{ project.title }}</div>
+        <div class="md-subhead">{{ project.createdAt }}</div>
       </md-card-header-text>
 
       <md-card-actions>
-        <md-button class="md-icon-button" v-on:click="clickStudy">
+        <md-button class="md-icon-button" v-on:click="clickProject">
           <md-icon>favorite</md-icon>
         </md-button>
 
@@ -32,17 +32,17 @@
 
 <script>
   export default {
-    name: 'StudyItem',
-    props: ['study'],
+    name: 'ProjectItem',
+    props: ['project'],
     data: function () {
       return {}
     },
     methods:{
-      clickStudy : function(){
+      clickProject : function(){
 
         //this.$router.push({name:"Study",params:{id:this.study.id}})
-        console.log(this.study.id)
-        this.$router.push('/studies/'+this.study.id)
+        console.log(this.project.id)
+        this.$router.push({name:'ProjectMain',params:{projectId : this.project.id}})
 
       }
     }

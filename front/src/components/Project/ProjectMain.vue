@@ -126,11 +126,18 @@
 
 <script>
   export default {
-    name : 'StudyUser',
-    props: ['study']
+    name : 'ProjectMain',
+    props: ['project']
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .viewport {
+    width: 320px;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: top;
+    overflow: auto;
+    border: 1px solid rgba(#000, .12);
+  }
 </style>

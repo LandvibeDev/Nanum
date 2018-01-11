@@ -1,28 +1,28 @@
 <template>
-  <div id="study_list">
-    <div v-for="study in studies">
-      <StudyItem :study="study"></StudyItem>
+  <div id="project_list">
+    <div v-for="project in projects">
+      <ProjectItem :project="project"></ProjectItem>
     </div>
   </div>
 </template>
 
 <script>
-  import StudyItem from './StudyItem.vue'
+  import ProjectItem from './ProjectItem.vue'
 
   export default {
-    components:{StudyItem},
-    name: 'StudyList',
+    components:{ProjectItem},
+    name: 'ProjectList',
     created: function () {
-      const baseUrl = '/api/studies/'
+      const baseUrl = '/api/projects/'
       this.axios.get(baseUrl)
         .then((result) => {
           console.log(result)
-          this.studies = result.data
+          this.projects = result.data
         })
     },
     data: function () {
       return {
-        studies: []
+        projects: []
       }
     }
 
@@ -30,7 +30,7 @@
 </script>
 
 <style scoped>
-  #study_list {
+  #project_list {
     width: 50%;
     margin: 0 auto;
   }

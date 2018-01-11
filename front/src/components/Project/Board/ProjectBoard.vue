@@ -21,7 +21,7 @@
 
   export default {
     components:{PostTemplate},
-    props: ['study'],
+    props: ['project'],
     created:function(){
       this.type = this.$store.state.type
       if(this.type === 0){

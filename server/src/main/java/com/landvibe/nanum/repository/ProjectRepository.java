@@ -1,15 +1,15 @@
 package com.landvibe.nanum.repository;
 
-import com.landvibe.nanum.model.Study;
+import com.landvibe.nanum.model.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface StudyRepository extends JpaRepository<Study, Long> {
+public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    List<Study> findByTitle(String title);
-    Study findById(long id);
+    List<Project> findByTitle(String title);
+    Project findById(long id);
 
 }

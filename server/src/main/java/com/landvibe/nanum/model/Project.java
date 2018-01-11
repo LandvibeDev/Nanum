@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 
 @Entity
-public class Study {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,11 +31,11 @@ public class Study {
 //    @JoinColumn(name = "user_id")
 //    private User creator;
 
-    public Study(){
+    public Project(){
 
     }
 
-    public Study(String title) {
+    public Project(String title) {
         this.title = title;
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
@@ -60,7 +60,7 @@ public class Study {
 
     @Override
     public String toString() {
-        return "Study{" +
+        return "Project{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", createdAt=" + createdAt +
