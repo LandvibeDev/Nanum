@@ -1,10 +1,12 @@
 package com.landvibe.nanum.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import javax.persistence.Entity;
 
 @Entity
+@Data
 public class GoogleUser extends User {
 
     public GoogleUser() {
