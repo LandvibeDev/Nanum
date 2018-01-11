@@ -11,28 +11,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/boards")
-public class BoardRestController {
+@RequestMapping("/api/projects")
+public class ProjectRestController {
 
     private ProjectService projectService;
     private BoardService boardService;
 
     @Autowired
-    public BoardRestController(ProjectService projectService, BoardService boardService) {
+    public ProjectRestController(ProjectService projectService, BoardService boardService) {
         this.projectService = projectService;
         this.boardService = boardService;
     }
 
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<Board> boards() {
-        return boardService.getAll();
+    public List<Project> projects() {
+        return projectService.getAll();
     }
 
-    @GetMapping("/{boardId}")
+    @GetMapping("/{projectId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Board board(@PathVariable long boardId) {
-        return boardService.getById(boardId);
+    public Project project(@PathVariable long projectId) {
+        return projectService.getById(projectId);
+    }
+
+    @GetMapping("/{projectId}/boards")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<Board> board(@PathVariable long projectId) {
+        return boardService.getByProject(projectId);
     }
 
 }

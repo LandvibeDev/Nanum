@@ -3,26 +3,19 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import Vuex from 'vuex'
-import NavBar from './components/NavBar.vue'
-import StudyItem from './components/Study/StudyItem.vue'
-import StudyMenu from './components/Study/StudyMenu.vue'
-import StudyWidget from './components/Study/StudyWidget.vue'
-import PostTemplate from './components/Study/Board/Template/PostTemplate.vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueMaterial from 'vue-material'
+import Toasted from 'vue-toasted'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 
 Vue.config.productionTip = false
 
 Vue.prototype.axios = axios
-Vue.component('NavBar', NavBar)
-Vue.component('StudyMenu', StudyMenu)
-Vue.component('StudyItem', StudyItem)
-Vue.component('StudyWidget', StudyWidget)
-Vue.component('PostTemplate', PostTemplate)
-Vue.use(BootstrapVue)
+
+Vue.use(Toasted)
+Vue.use(VueMaterial)
 Vue.use(Vuex)
 
 /* eslint-disable no-new */

@@ -1,15 +1,15 @@
 <template>
   <div>
     <div id = "home">
-      <b-button v-on:click = "clickButton('StudyList')">Study</b-button>
-      <b-button>Code</b-button>
+      <md-button class="md-raised" v-on:click = "clickButton('ProjectList')">Project</md-button>
+      <md-button class="md-raised" v-on:click = "clickButton('Code')">Code</md-button>
       <div class="hello">
         <div v-if="this.isLogined === 'true'">
           <p> welcome {{ username }} !</p>
-          <b-button v-on:click="logout">logout</b-button>
+          <md-button class="md-raised" v-on:click="logout">logout</md-button>
         </div>
         <div v-else>
-          <b-button v-on:click="login">login</b-button>
+          <md-button class="md-raised" v-on:click="login">login</md-button>
         </div>
       </div>
     </div>
@@ -17,11 +17,13 @@
 </template>
 
 <script>
+
   export default {
     name: 'Home',
     created: function () {
       this.isLogined = this.getCookieValue('isLogin')
-      this.username = this.getCookieValue('username')
+      this.username =  this.getCookieValue('username')
+
       console.log(document.cookie)
     },
     data: function () {
@@ -58,12 +60,15 @@
           if (end === -1) end = cookieData.length
           cValue = cookieData.substring(start, end)
         }
-        return unescape(cValue)
+        return decodeURIComponent(cValue)
       }
     }
   }
 </script>
 
 <style scoped>
+  #home{
+    margin-top: 60px;
+  }
 
 </style>

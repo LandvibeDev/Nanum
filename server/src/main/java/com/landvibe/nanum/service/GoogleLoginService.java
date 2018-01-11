@@ -139,6 +139,7 @@ public class GoogleLoginService {
         cookieGenerator.setCookieName("isLogin");
         cookieGenerator.addCookie(response, "true");
         cookieGenerator.setCookieName("username");
+        System.out.println(URLEncoder.encode(googleUser.getUsername(), "utf-8"));
         cookieGenerator.addCookie(response, URLEncoder.encode(googleUser.getUsername(), "utf-8"));
         cookieGenerator.setCookieMaxAge(600);
     }
