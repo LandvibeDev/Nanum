@@ -17,7 +17,7 @@ import java.util.Calendar;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long postId;
 
     @Column
     private String title;

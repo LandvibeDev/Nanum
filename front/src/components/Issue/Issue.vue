@@ -22,22 +22,32 @@
         // this.$router.push({path: '/issues/new'}) // -> /issues/new
       },
       clickIssueUpdate: function () {
-        //
+        // go IssueTemplate component with issue data
       },
       clickIssueDelete: function () {
-        // delete request to server
-        // redirect to IssueList
+        this.axios.delete(this.baseUri)
+        .then((result) => {
+          console.log(result)
+          this.$router.replace({name: 'IssueContainer'})
+        })
+        // .catch((e) => {
+        //   console.log(e)
+        // })
+        // .error((err) => {
+        //   console.log(err)
+        // })
       }
     },
     data: function () {
       return {
-        issue: {}
+        issue: {},
+        baseUri: ''
       }
     },
     created: function () {
       this.issueId = this.$route.params.issueId
-      const baseUrl = '/api/issues/' + this.issueId
-      this.axios.get(baseUrl)
+      this.baseUrl = '/api/issues/' + this.issueId
+      this.axios.get(this.baseUrl)
         .then((result) => {
           console.log(result)
           this.issue = result.data
