@@ -1,19 +1,29 @@
 package com.landvibe.nanum.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class User {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     @Column
     private String username;
@@ -44,9 +54,6 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Calendar updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
-    private List<Project> projects;
-
     public User() {
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
@@ -57,5 +64,10 @@ public class User {
         this.email = email;
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
+    }
+
+    @JsonIgnore
+    public String getSnsId(){
+        return this.snsId;
     }
 }

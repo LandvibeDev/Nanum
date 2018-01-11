@@ -1,12 +1,12 @@
 package com.landvibe.nanum.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.persistence.Entity;
 
-@Entity
-@Data
 public class GoogleUser extends User {
 
     public GoogleUser() {
@@ -26,7 +26,6 @@ public class GoogleUser extends User {
         super.setEmail(email);
     }
 
-    @Override
     @JsonProperty("id")
     public void setSnsId(String snsId) {
         super.setSnsId(snsId);
@@ -37,5 +36,4 @@ public class GoogleUser extends User {
     public void setProfileImage(String profileImage) {
         super.setProfileImage(profileImage);
     }
-
 }

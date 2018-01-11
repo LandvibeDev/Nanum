@@ -2,7 +2,7 @@ package com.landvibe.nanum.controller;
 
 import com.landvibe.nanum.model.GoogleToken;
 import com.landvibe.nanum.model.GoogleUser;
-import com.landvibe.nanum.repository.GoogleUserRepository;
+//import com.landvibe.nanum.repository.GoogleUserRepository;
 import com.landvibe.nanum.service.GoogleLoginService;
 import com.mysql.fabric.Response;
 import org.springframework.beans.factory.annotation.Autowired;

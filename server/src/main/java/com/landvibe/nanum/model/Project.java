@@ -12,13 +12,14 @@ import java.util.List;
 
 
 @Entity
-@Data
+@Setter
+@Getter
 public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="project_id")
-    private long projectId;
+    private long id;
 
     @Column
     private String title;
@@ -31,11 +32,11 @@ public class Project {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar updatedAt;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "user_project",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+//    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//    @JoinTable(name = "user_project",
+//            joinColumns = @JoinColumn(name = "project_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private List<User> users;
 
     public Project(){
 

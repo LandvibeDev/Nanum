@@ -19,6 +19,9 @@
                    v-on:click="clickMenu({name:'ProjectBoard',type:board.type,boardId:board.id})">
           {{board.title}}
         </md-button>
+        <md-button class="md-icon-button" v-on:click="clickMenu({name:'IssueContainer'})">
+          Issue
+        </md-button>
           <!--<md-list-item v-on:click="clickMenu({name:'ProjectMain'})">Home</md-list-item>-->
           <!--<md-list-item v-on:click="clickMenu({name:'ProjectUser'})">User</md-list-item>-->
           <!--<md-list-item v-on:click="clickMenu({name:'Code'})">Code</md-list-item>-->
@@ -52,11 +55,11 @@
     methods: {
       clickMenu: function (option) {
         const params = {
-          projectId : this.projectId,
-          boardId : option.boardId
+          projectId: this.projectId,
+          boardId: option.boardId
         }
         this.$store.commit('setType',option.type)
-        this.$router.push({name:option.name,params:params})
+        this.$router.push({name: option.name, params: params})
       }
     }
   }

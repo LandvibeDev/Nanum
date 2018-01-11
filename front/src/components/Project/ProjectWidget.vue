@@ -8,10 +8,10 @@
 
 <script>
   export default {
-    name : 'ProjectWidget',
-    props: ["projectId"],
-    methods:{
-      clickWidget:function(routerPath){
+    name: 'ProjectWidget',
+    props: ['projectId'],
+    methods: {
+      clickWidget: function (routerPath) {
         const basePath = '/projects/' + this.projectId
         this.$router.push(basePath + routerPath)
       }
