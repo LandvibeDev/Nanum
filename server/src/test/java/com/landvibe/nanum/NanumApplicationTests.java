@@ -34,7 +34,6 @@ public class NanumApplicationTests {
 	public void projectTest() {
 		projectRepository.save(new Project("Jeong's Project"));
 		projectRepository.save(new Project("LOL Project"));
-
 	}
 
 	@Test
