@@ -1,9 +1,9 @@
 package com.landvibe.nanum.restcontroller;
 
 import com.landvibe.nanum.model.Board;
-import com.landvibe.nanum.model.Study;
+import com.landvibe.nanum.model.Project;
 import com.landvibe.nanum.service.BoardService;
-import com.landvibe.nanum.service.StudyService;
+import com.landvibe.nanum.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import java.util.List;
 @RequestMapping("/api/boards")
 public class BoardRestController {
 
-    private StudyService studyService;
+    private ProjectService projectService;
     private BoardService boardService;
 
     @Autowired
-    public BoardRestController(StudyService studyService,BoardService boardService) {
-        this.studyService = studyService;
+    public BoardRestController(ProjectService projectService, BoardService boardService) {
+        this.projectService = projectService;
         this.boardService = boardService;
     }
 

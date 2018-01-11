@@ -131,7 +131,13 @@ public class GoogleLoginService {
         User user = null;
         user = userRepository.findByEmail(loginUser.getEmail());
         if (user == null) {
-            userRepository.saveAndFlush(loginUser);
+            user = new User();
+            user.setUsername(loginUser.getUsername());
+            user.setEmail(loginUser.getEmail());
+            user.setSnsId(loginUser.getSnsId());
+            user.setProfileImage(loginUser.getProfileImage());
+            userRepository.save(user);
+//            userRepository.saveAndFlush(user);
         }
         session.setAttribute("userId", loginUser.getId());
 //        session.setAttribute("username", googleUser.getUsername());

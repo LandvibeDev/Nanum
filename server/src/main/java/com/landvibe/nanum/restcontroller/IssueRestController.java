@@ -1,5 +1,6 @@
 package com.landvibe.nanum.restcontroller;
 
+import com.landvibe.nanum.model.dto.IssueDto;
 import com.landvibe.nanum.model.post.Issue;
 import com.landvibe.nanum.service.IssueService;
 import com.landvibe.nanum.service.UserService;
@@ -29,8 +30,9 @@ public class IssueRestController {
 
     @PostMapping("")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Issue createIssuePost(HttpSession session, @RequestBody Issue issue) {
-        return issueService.create(session, issue);
+    public Issue createIssuePost(HttpSession session, @RequestBody IssueDto issueDto) {
+        System.out.println("issue create request: " + issueDto);
+        return issueService.create(session, issueDto);
     }
 
     @GetMapping("/{issueId}")

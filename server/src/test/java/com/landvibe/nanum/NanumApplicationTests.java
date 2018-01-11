@@ -1,11 +1,11 @@
 package com.landvibe.nanum;
 
 import com.landvibe.nanum.model.Board;
-import com.landvibe.nanum.model.Study;
+import com.landvibe.nanum.model.Project;
 import com.landvibe.nanum.model.User;
 import com.landvibe.nanum.repository.BoardRepository;
 
-import com.landvibe.nanum.repository.StudyRepository;
+import com.landvibe.nanum.repository.ProjectRepository;
 import com.landvibe.nanum.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -22,7 +21,7 @@ import java.util.List;
 public class NanumApplicationTests {
 
 	@Autowired
-	StudyRepository studyRepository;
+    ProjectRepository projectRepository;
 
 	@Autowired
     UserRepository userRepository;
@@ -32,28 +31,22 @@ public class NanumApplicationTests {
 
 
 	@Test
-	@Transactional
-	public void studyTest() {
-		studyRepository.save(new Study("Java Study"));
-		studyRepository.save(new Study("C++ Study"));
+	public void projectTest() {
+		projectRepository.save(new Project("Jeong's Project"));
+		projectRepository.save(new Project("LOL Project"));
 
-		List<Study> list = studyRepository.findAll();
-
-		for(Study study : list){
-			System.out.println(study);
-		}
 	}
 
 	@Test
 	public void boardTest() {
 //		Board board = new Board("Math",1);
 //		Board board2 = new Board("English",1);
-//		Study study = studyRepository.findById(1);
-//		board.setStudy(study);
-//		board2.setStudy(study);
+//		Project project = projectRepository.findById(1);
+//		board.setProject(project);
+//		board2.setProject(project);
 //		boardRepository.save(board);
 //		boardRepository.save(board2);
-//		studyRepository.save(study);
+//		projectRepository.save(project);
 		List<Board> boards = boardRepository.findAll();
 		System.out.println(boards.get(0));
 

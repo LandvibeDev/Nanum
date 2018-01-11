@@ -10,6 +10,7 @@ import java.util.List;
 public interface IssueRepository extends JpaRepository<Issue, Long>{
     List<Issue> findAll();
     Issue findById(long id);
+    List<Issue> findByProjectId(long projectId);
 //    List<Issue> findAllByUserId(long userId);
 //    findAllByProjectId
 }

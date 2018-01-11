@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @RequestMapping("/issues")
-public class IssuePostController {
+public class IssueController {
 
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)

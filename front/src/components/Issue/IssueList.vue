@@ -1,13 +1,13 @@
-<template id='issue-template'>
+<template>
   <div class='container'>
-    <button v-on:click="clickIssueCreate()">Create Issue</button>
+    <md-button v-on:click="clickIssueCreate()">Create Issue</md-button>
     <input v-model='searchQuery' class='search-box' placeholder='Search for issues...'>
     <div class='timeline' v-if='anyIssue()'>
       <div v-for='(dateWithIssues, date) in searchIssues'>
         <p v-if='dateWithIssues.length > 0' class='date'>{{ date }}</p>
         <div v-for='issue in dateWithIssues' class='issue'>
           <span class='dot'></span>
-          <IssueItem :issue="issue"></IssueItem>
+          <IssueItem :issue="issue" :project="project"></IssueItem>
         </div>
       </div>
     </div>
@@ -18,7 +18,6 @@
 <script>
   export default {
     name: 'IssueList',
-    template: ['#issue-template'],
     computed: {
       searchIssues () {
         let searchRegex = new RegExp(this.searchQuery, 'i')
@@ -53,7 +52,10 @@
         return count
       },
       clickIssueCreate: function () {
-        this.$router.push('/issues/new')
+        const params = {
+          projectId: this.$route.params.projectId
+        }
+        this.$router.push({name: 'IssueTemplate', params: params})
       }
     },
     data: function () {
@@ -65,7 +67,8 @@
       }
     },
     created: function () {
-      const baseUrl = '/api/issues'
+      let projectId = this.$route.params.projectId
+      const baseUrl = '/api/projects/' + projectId + '/issues'
       this.axios.get(baseUrl)
         .then((result) => {
           console.log(result)

@@ -16,7 +16,11 @@
     },
     methods: {
       clickIssue: function () {
-        this.$router.push('/issues/' + this.issue.id) // -> /issues/new
+        const params = {
+          projectId: this.$route.params.projectId,
+          issueId: this.issue.id
+        }
+        this.$router.push({name: 'Issue', params: params})
       }
     }
   }

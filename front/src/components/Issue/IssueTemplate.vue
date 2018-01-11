@@ -2,7 +2,7 @@
   <div>
     Title: <input v-model="title" placeholder="여기를 수정해보세요">
     Message: <textarea v-model="content" placeholder="내용"></textarea>
-    <button v-on:click="createIssue()">new issue</button>
+    <md-button v-on:click="createIssue()">new issue</md-button>
   </div>
 </template>
 
@@ -12,20 +12,28 @@
     data: function () {
       return {
         title: '',
-        content: ''
+        content: '',
+        projectId: this.$route.params.projectId
       }
     },
     methods: {
       createIssue: function () {
+        // const baseUri = '/api/projects/' + this.project.id + '/issues'
         const baseUri = '/api/issues'
         this.axios.post(baseUri, {
-          title: this.title,
-          content: this.content
+          issue: {
+            title: this.title,
+            content: this.content
+          },
+          projectId: this.projectId
         })
         .then((response) => {
           // console.log(response)
-          let createdIssueId = response.data.id
-          this.$router.push({path: `/issues/${createdIssueId}`})
+          const params = {
+            projectId: this.projectId,
+            issueId: response.data.id // created issue id
+          }
+          this.$router.push({name: 'Issue', params: params})
         })
         .catch((error) => {
           console.log(error)

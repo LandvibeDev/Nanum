@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.persistence.Entity;
 
-@Entity
 public class GoogleUser extends User {
 
     public GoogleUser() {

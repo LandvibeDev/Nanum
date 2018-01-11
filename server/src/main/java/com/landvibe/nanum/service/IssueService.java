@@ -1,8 +1,11 @@
 package com.landvibe.nanum.service;
 
+import com.landvibe.nanum.model.Project;
 import com.landvibe.nanum.model.User;
+import com.landvibe.nanum.model.dto.IssueDto;
 import com.landvibe.nanum.model.post.Issue;
 import com.landvibe.nanum.repository.IssueRepository;
+import com.landvibe.nanum.repository.ProjectRepository;
 import com.landvibe.nanum.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +21,12 @@ public class IssueService {
 
     private IssueRepository issueRepository;
     private UserRepository userRepository;
+    private ProjectRepository projectRepository;
 
-    public IssueService(IssueRepository issuePostRepository, UserRepository userRepository) {
+    public IssueService(IssueRepository issuePostRepository, UserRepository userRepository, ProjectRepository projectRepository) {
         this.issueRepository = issuePostRepository;
         this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
     }
 
     public HashMap<String, List<Issue>> getAll() {
@@ -61,10 +66,14 @@ public class IssueService {
 //        return issuePostRepository.findAllByUserId(id);
 //    }
 
-    public Issue create(HttpSession session, Issue issue) {
+    public Issue create(HttpSession session, IssueDto issueDto) {
         User user = (User) session.getAttribute("user");
         User creator = userRepository.findByEmail(user.getEmail());
+        Project project = projectRepository.findOne(issueDto.getProjectId());
+        Issue issue = issueDto.getIssue();
+
         issue.setCreator(creator);
+        issue.setProject(project);
         return issueRepository.save(issue);
     }
 
@@ -85,8 +94,12 @@ public class IssueService {
 //            throw new AccessDeniedException("해당 게시물을 수정할 수 있는 권한이 없습니다.");
 //        }
         if (userId != issue.getCreator().getId())
-        if (issue != null){
-            issueRepository.delete(issue);
-        }
+            if (issue != null) {
+                issueRepository.delete(issue);
+            }
+    }
+
+    public List<Issue> getAllByProjectId(long projectId) {
+        return issueRepository.findByProjectId(projectId);
     }
 }

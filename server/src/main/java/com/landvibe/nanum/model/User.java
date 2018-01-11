@@ -14,15 +14,16 @@ import java.util.Calendar;
 @Setter
 @ToString
 @AllArgsConstructor
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class User {
 
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long userId;
+    private long id;
 
     @Column
     private String username;

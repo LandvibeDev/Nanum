@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    name: 'IssueContainer'
+    name: 'IssueContainer',
   }
 </script>
 

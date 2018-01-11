@@ -1,8 +1,8 @@
 <template>
   <div>
-    <button v-on:click="clickIssueCreate()">Create Issue</button>
-    <button v-on:click="clickIssueUpdate()">Update Issue</button>
-    <button v-on:click="clickIssueDelete()">Delete Issue</button>
+    <md-button v-on:click="clickIssueCreate()">Create Issue</md-button>
+    <md-button v-on:click="clickIssueUpdate()">Update Issue</md-button>
+    <md-button v-on:click="clickIssueDelete()">Delete Issue</md-button>
     <p>title {{issue.title}}</p>
     <p>content: {{issue.content}}</p>
     <p>createdAt: {{issue.createdAt}}</p>
@@ -17,9 +17,10 @@
     name: 'Issue',
     methods: {
       clickIssueCreate: function () {
-        // this.$router.push('/issues/new')
-        this.$router.replace('/issues/new')
-        // this.$router.push({path: '/issues/new'}) // -> /issues/new
+        const params = {
+          projectId: this.project.id
+        }
+        this.$router.push({name: 'IssueTemplate', params: params})
       },
       clickIssueUpdate: function () {
         // go IssueTemplate component with issue data
@@ -30,12 +31,6 @@
           console.log(result)
           this.$router.replace({name: 'IssueContainer'})
         })
-        // .catch((e) => {
-        //   console.log(e)
-        // })
-        // .error((err) => {
-        //   console.log(err)
-        // })
       }
     },
     data: function () {

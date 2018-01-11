@@ -32,14 +32,9 @@ public class MainController {
         return "redirect:/";
     }
 
-    @GetMapping("/studies/**")
+    @GetMapping("/projects/**")
     @ResponseStatus(value = HttpStatus.OK)
-    public String study(HttpSession session) {
-        if (session.getAttribute("user") == null) {
-            return "redirect:/login";
-        } else {
-            System.out.println("session exist! " + session.getAttribute("user"));
-            return "index";
-        }
+    public String project(HttpSession session) {
+        return "index";
     }
 }
