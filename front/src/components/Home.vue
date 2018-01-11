@@ -17,12 +17,11 @@
 </template>
 
 <script>
-
   export default {
     name: 'Home',
     created: function () {
       this.isLogined = this.getCookieValue('isLogin')
-      this.username =  this.getCookieValue('username')
+      this.username = this.getCookieValue('username')
 
       console.log(document.cookie)
     },
@@ -33,8 +32,8 @@
       }
     },
     methods: {
-      clickButton:function(routerName){
-        this.$router.push({name:routerName})
+      clickButton: function (routerName) {
+        this.$router.push({ name: routerName })
       },
       login: function () {
         this.$router.push('/login')
@@ -51,7 +50,7 @@
       getCookieValue: function (cookieName) {
         cookieName = cookieName + '='
         let cookieData = document.cookie
-        console.log(document.cookie)
+        // console.log(document.cookie)
         let start = cookieData.indexOf(cookieName)
         let cValue = ''
         if (start !== -1) {

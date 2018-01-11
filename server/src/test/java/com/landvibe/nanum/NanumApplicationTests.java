@@ -55,13 +55,14 @@ public class NanumApplicationTests {
 	@Test
     @Transactional
     public void UserTest() {
-	    userRepository.save(new User("sol", "sol@naver.com"));
-        userRepository.save(new User("jdb", "jgb@naver.com"));
+		User user = new User("sol", "sol@nvarer.com");
+		user.setSnsId("288249");
+		userRepository.save(user);
 
-        List<User> list = userRepository.findAll();
-        for (User user : list){
-            System.out.println(user);
-        }
+//        List<User> list = userRepository.findAll();
+//        for (User user : list){
+//            System.out.println(user);
+//        }
     }
 
 }

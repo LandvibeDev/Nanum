@@ -51,7 +51,7 @@
 
 <script>
   export default {
-    name : 'ProjectUser',
+    name: 'ProjectUser',
     props: ['project']
   }
 </script>
