@@ -31,9 +31,10 @@ public class NanumApplicationTests {
 
 
 	@Test
+	@Transactional
 	public void projectTest() {
-		projectRepository.save(new Project("Jeong's Project"));
-		projectRepository.save(new Project("LOL Project"));
+//		projectRepository.save(new Project("Jeong's Project"));
+//		projectRepository.save(new Project("LOL Project"));
 	}
 
 	@Test

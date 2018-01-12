@@ -19,16 +19,9 @@
                    v-on:click="clickMenu({name:'ProjectBoard',type:board.type,boardId:board.id})">
           {{board.title}}
         </md-button>
-        <md-button class="md-icon-button" v-on:click="clickMenu({name:'IssueContainer'})">
+        <md-button class="md-icon-button" v-on:click="clickMenu({name:'IssueList'})">
           Issue
         </md-button>
-          <!--<md-list-item v-on:click="clickMenu({name:'ProjectMain'})">Home</md-list-item>-->
-          <!--<md-list-item v-on:click="clickMenu({name:'ProjectUser'})">User</md-list-item>-->
-          <!--<md-list-item v-on:click="clickMenu({name:'Code'})">Code</md-list-item>-->
-          <!--<md-list-item v-for="board in boards"-->
-                        <!--v-on:click="clickMenu({name:'ProjectBoard',type:board.type,boardId:board.id})">-->
-            <!--{{board.title}}-->
-          <!--</md-list-item>-->
       </md-speed-dial-content>
     </md-speed-dial>
   </div>

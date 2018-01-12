@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="viewport">
       <md-toolbar :md-elevation="1">
         <span class="md-title">Primary</span>
@@ -25,7 +24,7 @@
 
 <script>
   export default {
-    name: 'ProjectUser',
+    name: 'ProjectChat',
     props: ['project'],
     data:function(){
       return{

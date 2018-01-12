@@ -11,6 +11,7 @@ import ProjectMain from '../components/Project/ProjectMain.vue'
 import ProjectBoard from '../components/Project/Board/ProjectBoard.vue'
 import ProjectList from '../components/Project/ProjectList.vue'
 import ProjectUser from '../components/Project/ProjectUser.vue'
+import ProjectAdd from '../components/Project/ProjectAdd.vue'
 import WriteProjectBoard from '../components/Project/Board/WriteProjectBoard.vue'
 import Code from '../components/Code/Code.vue'
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/projects',
       name: 'ProjectList',
       component: ProjectList
+    },
+    {
+      path: '/addProject',
+      name: 'ProjectAdd',
+      component: ProjectAdd
     },
     {
       path: '/login',

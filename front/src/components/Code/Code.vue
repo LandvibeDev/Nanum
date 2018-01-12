@@ -36,6 +36,7 @@
       this.initAce()
     },
     created: function () {
+      this.projectId = this.$route.params.projectId
       this.getFileList()
       this.initSockJS()
     },
@@ -111,7 +112,7 @@
         }
       },
       getFileAndDrawEditor (fileName, path) {
-        let url = '/api/files/' + fileName
+        let url = '/api/projects/'+this.projectId + '/files/' + fileName
         const param = {
           params: {
             path: path
@@ -145,7 +146,7 @@
         console.log(node)
       },
       getFileList () {
-        this.axios.get('/api/directories').then((result) => {
+        this.axios.get('/api/projects/'+this.projectId +'/directories').then((result) => {
           this.fileList = result.data.filter((file) => {
             if (file.type === 'FILE') {
               file.icon = 'tree-file'
@@ -183,7 +184,7 @@
               path: node.data.path
             }
           }
-          this.axios.get('/api/directories/' + node.data.text, param).then((result) => {
+          this.axios.get('/api/projects/'+this.projectId+'/directories/' + node.data.text, param).then((result) => {
             let temp = result.data.filter((file) => {
               if (file.type === 'FILE') {
                 file.icon = 'tree-file'

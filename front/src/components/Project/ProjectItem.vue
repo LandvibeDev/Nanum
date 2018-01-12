@@ -10,6 +10,7 @@
       <md-card-header-text >
         <div class="md-title">{{ project.title }}</div>
         <div class="md-subhead">{{ project.createdAt }}</div>
+        <div class="md-subhead">{{ project.description }}</div>
       </md-card-header-text>
 
       <md-card-actions>

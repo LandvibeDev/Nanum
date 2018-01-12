@@ -141,7 +141,7 @@ public class GoogleLoginService {
         }
         session.setAttribute("userId", loginUser.getId());
 //        session.setAttribute("username", googleUser.getUsername());
-        session.setAttribute("user", loginUser);
+        session.setAttribute("user", user);
 
 //        cookieGenerator.setCookieName("sessionId");
 //        cookieGenerator.addCookie(response, session.getId());
