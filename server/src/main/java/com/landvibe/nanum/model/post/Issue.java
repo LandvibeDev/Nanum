@@ -1,5 +1,6 @@
 package com.landvibe.nanum.model.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.landvibe.nanum.model.Project;
 import com.landvibe.nanum.model.User;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "issue")
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Issue extends Post {
 
     @Id
@@ -19,7 +21,7 @@ public class Issue extends Post {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User creator;
 

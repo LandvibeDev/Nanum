@@ -24,34 +24,42 @@ public class IssueRestController {
 
     @GetMapping("")
     @ResponseStatus(value = HttpStatus.OK)
-    public HashMap<String, List<Issue>> getAllIssuePost() {
+    public HashMap<String, List<Issue>> getAllIssue() {
         return issueService.getAll();
     }
 
     @PostMapping("")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Issue createIssuePost(HttpSession session, @RequestBody IssueDto issueDto) {
-        System.out.println("issue create request: " + issueDto);
+    public Issue createIssue(HttpSession session, @RequestBody IssueDto issueDto) {
+//        System.out.println("issue create request: " + issueDto);
         return issueService.create(session, issueDto);
     }
 
     @GetMapping("/{issueId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Issue getIssuePostById(@PathVariable long issueId) {
+    public Issue getIssueById(@PathVariable long issueId) {
         return issueService.getById(issueId);
     }
 
-    //    @DeleteMapping("/{issueId}")
-    @RequestMapping(value = "/{issueId}", method = RequestMethod.DELETE)
+    //    @RequestMapping(value = "/{issueId}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{issueId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteIssuePostById(HttpSession session, @PathVariable long issueId) {
+    public @ResponseBody void deleteIssueById(HttpSession session, @PathVariable long issueId) {
         issueService.delete(session, issueId);
+//        return "redirect:/projects";
+    }
+
+//    @PutMapping("/api/issues/{issueId}")
+    @PatchMapping("/{issueId}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public Issue updateIssue(HttpSession session, @PathVariable long issueId, @RequestBody Issue issue) {
+        System.out.println("issueID + " + issueId + "Issue request body: " + issue);
+        return issueService.update(session, issueId, issue);
     }
 
     // TODO:
-    // getIssuePostByUserId
-    // getIssuePostByProjectId
-    // getIssuePostByUserIdAndPostId
+    // getIssueByUserId
+    // getIssueByUserIdAndId
     // getAllIssueByUserId
 
 }

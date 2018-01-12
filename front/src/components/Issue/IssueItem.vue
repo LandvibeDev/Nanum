@@ -3,7 +3,7 @@
       <p class='issue-date'>{{ issue.createdAt }}</p>
       <p> id: {{ issue.id }}</p>
       <h3> title: {{ issue.title }}</h3>
-      <p> content: {{ issue.content }}</p>
+      <!--<p> content: {{ issue.content }}</p>-->
   </div>
 </template>
 

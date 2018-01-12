@@ -1,37 +1,41 @@
 <template>
   <div>
-    Title: <input v-model="title" placeholder="여기를 수정해보세요">
-    Message: <textarea v-model="content" placeholder="내용"></textarea>
-    <md-button v-on:click="createIssue()">new issue</md-button>
+    <md-field>
+      <label>Title</label>
+      <md-input v-model="title" required></md-input>
+    </md-field>
+    <md-field>
+      <label>Content</label>
+      <md-textarea v-model="content" required></md-textarea>
+    </md-field>
+    <md-button class="md-raised" v-on:click="createIssue()">new issue</md-button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'IssueTemplate',
+    name: 'IssueCreateTemplate',
     data: function () {
       return {
         title: '',
         content: '',
-        projectId: this.$route.params.projectId
+        projectId: this.$route.params.projectId,
+        baseUrl: '/api/issues'
       }
     },
     methods: {
       createIssue: function () {
-        // const baseUri = '/api/projects/' + this.project.id + '/issues'
-        const baseUri = '/api/issues'
-        this.axios.post(baseUri, {
+        this.axios.post(this.baseUrl, {
           issue: {
             title: this.title,
             content: this.content
           },
           projectId: this.projectId
         })
-        .then((response) => {
-          // console.log(response)
+        .then((result) => {
           const params = {
             projectId: this.projectId,
-            issueId: response.data.id // created issue id
+            issueId: result.data.id // created issue id
           }
           this.$router.push({name: 'Issue', params: params})
         })
