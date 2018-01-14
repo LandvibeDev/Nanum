@@ -42,7 +42,6 @@ public class IssueCommentService {
         User creator = userRepository.findByEmail(currentUser.getEmail());
         Issue issue = issueRepository.getOne(issueCommentDto.getIssueId());
         IssueComment issueComment = issueCommentDto.getIssueComment();
-        issueComment.setContent(issueComment.getContent().replace("\n", "<br>"));
         issue.getIssueComments().add(issueComment);
         issueComment.setCreator(creator);
         return issueCommentRepository.save(issueComment);
@@ -55,7 +54,6 @@ public class IssueCommentService {
             System.out.println("nulllll");
             return null;
         }
-        fetchedIssueComment.setContent(issueComment.getContent().replace("\n", "<br>"));
         fetchedIssueComment.setUpdatedAt(Calendar.getInstance());
         issueCommentRepository.save(fetchedIssueComment);
         return fetchedIssueComment;
