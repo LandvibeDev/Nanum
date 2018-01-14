@@ -2,55 +2,40 @@
   <div class="page-container">
     <md-app>
       <md-app-toolbar class="md-primary">
-        <span class="md-title">{{issue.title}}</span>
+        <p class="md-title">{{issue.title}}</p>
       </md-app-toolbar>
 
-      <md-app-drawer md-permanent="full">
-        <md-toolbar class="md-transparent" md-elevation="0">
-          Navigation
-        </md-toolbar>
-        <md-list>
-
-          <md-list-item>
-            <span class="md-list-item-text">createdAt: {{issue.createdAt}}</span>
-          </md-list-item>
-
-          <md-list-item>
-            <span class="md-list-item-text">updatedAt: {{issue.updatedAt}}</span>
-          </md-list-item>
-
-          <!--<md-list-item>-->
-            <!--<span class="md-list-item-text">user: {{issue.creator['username']}}</span>-->
-          <!--</md-list-item>-->
-
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <md-button v-on:click="clickIssueCreate()">New Issue</md-button>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <md-button v-on:click="clickIssueUpdate()">Update Issue</md-button>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>delete</md-icon>
-            <md-button v-on:click="clickIssueDelete()">Delete Issue</md-button>
-          </md-list-item>
-
-        </md-list>
-      </md-app-drawer>
-
+      <!-- 본문 -->
       <md-app-content>
-        <p>{{issue.content}}</p>
+        <i class="material-icons">add_box</i>
+        <md-button v-on:click="clickIssueCreate()">New</md-button>
+        <i class="material-icons">mode_edit</i>
+        <md-button v-on:click="clickIssueUpdate()">Update</md-button>
+        <i class="material-icons">clear</i>
+        <md-button v-on:click="clickIssueDelete">delete</md-button>
+
+        <p>created {{issue.createdAt}} By {{issue.creator.username}}</p>
+        <p>updatedAt: {{issue.updatedAt}}</p>
+
+        <!-- comments -->
+        <div v-for="issueComment in this.issue.issueComments">
+          <IssueComment :issueComment="issueComment" :isTemplate="false"></IssueComment><br>
+        </div>
+        <div>
+          <!--issue Comment template here for create-->
+          <IssueComment :isTemplate="true"></IssueComment>
+        </div>
       </md-app-content>
     </md-app>
   </div>
 </template>
 
 <script>
+  import IssueComment from './IssueComment'
+
   export default {
     name: 'Issue',
+    components: {IssueComment},
     methods: {
       clickIssueCreate: function () {
         const params = {
@@ -67,10 +52,10 @@
       },
       clickIssueDelete: function () {
         this.axios.delete(this.baseUrl)
-        .then((result) => {
-          console.log(result)
-          this.$router.replace({name: 'IssueList'})
-        })
+          .then((result) => {
+            console.log(result)
+            this.$router.replace({name: 'IssueList'})
+          })
       }
     },
     data: function () {
@@ -91,6 +76,7 @@
         })
     }
   }
+
 </script>
 
 <style scoped>
@@ -106,14 +92,14 @@
   }
 
   /*.md-app {*/
-    /*max-height: 400px;*/
-    /*border: 1px solid;*/
+  /*max-height: 400px;*/
+  /*border: 1px solid;*/
   /*}*/
 
   /*!* Demo purposes only*!*/
-   /*.md-drawer {*/
-     /*width: 230px;*/
-     /*max-width: calc(100vw - 125px);*/
-   /*}*/
+  /*.md-drawer {*/
+  /*width: 230px;*/
+  /*max-width: calc(100vw - 125px);*/
+  /*}*/
 
 </style>

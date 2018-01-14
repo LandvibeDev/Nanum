@@ -48,10 +48,20 @@ public class Post {
         this.updatedAt = this.createdAt;
     }
 
+    public Post(String content) {
+        this.content = content;
+        this.createdAt = Calendar.getInstance();
+        this.updatedAt = this.createdAt;
+    }
+
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
     }
+
+//    public void setContent(String content){
+//        this.content = content.replace("\r\n", "<br>");
+//    }
 }

@@ -6,7 +6,13 @@
 
 <script>
   export default {
-    name: 'IssueContainer'
+    name: 'IssueContainer',
+    data: function () {
+      return {
+        isCreateIssue: false,
+        isCreqteIssueComment: false
+      }
+    }
   }
 </script>
 

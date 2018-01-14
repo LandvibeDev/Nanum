@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,8 +32,13 @@ public class Issue extends Post {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "issue_comment_id")
+    private Collection<IssueComment> issueComments;
+
     public Issue() {
         super();
+        issueComments = new ArrayList<IssueComment>();
     }
 
     public Issue(String title, String content, User user) {
