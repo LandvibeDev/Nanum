@@ -1,8 +1,36 @@
 <template>
   <div>
-    <v-jstree id="tree" :data="fileList" allow-batch whole-row @item-click="clickFile"
-              @item-toggle="toggleDirectory"></v-jstree>
+    <!--<v-jstree id="tree" :data="fileList" draggable allow-batch whole-row @item-click="clickFile"-->
+              <!--@item-toggle="toggleDirectory"></v-jstree>-->
+    <div id="tree">
+      <div id="edit-tree">
+        <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('add')">Add</md-button>
+        <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('delete')">Delete</md-button>
+        <md-button class="md-dense md-primary edit-icon" v-on:click="update">Save</md-button>
+      </div>
+      <ul id="project-tree" class="fa-ul tree-ul">
+        <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item"></CodeTree>
+      </ul>
+    </div>
     <div v-on:keyup="keyEvent" id="editor" ref="editor">/*ace editor*/</div>
+
+    <transition name="modal">
+      <EditModal v-if="addActive" @close="addActive = false" @confirm="addFile" v-model="addFileValue">
+        <!--
+          you can use custom content here to overwrite
+          default content
+        -->
+        <h3 slot="header">Enter a new file name</h3>
+        <md-field slot="body">
+          <label>name</label>
+          <md-input v-model="addFileValue"/>
+        </md-field>
+      </EditModal>
+      <EditModal v-if="deleteActive" @close="deleteActive = false" @confirm="deleteFile">
+        <h3 slot="header">delete {{this.selectedFile.model.text}}?</h3>
+      </EditModal>
+    </transition>
+
   </div>
 
 </template>
@@ -14,10 +42,11 @@
   import 'brace/ext/language_tools'
   import '../../lib/sockjs.min'
   import '../../lib/stomp.min'
-  import VJstree from 'vue-jstree'
+  import CodeTree from './CodeTree.vue'
+  import EditModal from './EditModal.vue'
 
   export default {
-    components: {VJstree},
+    components: {CodeTree,EditModal},
     data: function () {
       return {
         fileContent: '',
@@ -27,21 +56,27 @@
         subscribeJoinObject:null,
         stompClient: null,
         editorEl: null,
-        fileList: [],
+        fileList: {text:'Project',type:'DIRECTORY',path:"",children:[]},
         preCursor: null,
-        solo : true
+        solo : true,
+        projectId : this.$route.params.projectId,
+        addActive: false,
+        addFileValue: null,
+        deleteActive: false,
+        selectedFile: null,
+        intervalId: null
       }
     },
     mounted: function () {
       this.initAce()
     },
     created: function () {
-      this.projectId = this.$route.params.projectId
-      this.getFileList()
+//      this.getFileList()
       this.initSockJS()
     },
     destroyed : function(){
       this.socket.close()
+      clearInterval(this.intervalId)
     },
     methods: {
       initAce: function () {
@@ -101,14 +136,23 @@
         this.sendMessage(this.fileContent)
       },
       clickFile (node) {
-        const fileName = node.model.text
-        const path = node.model.path
-        if (node.model.type === 'FILE') {
+        console.log(node)
+        if(this.selectedFile == node){
+          return
+        }
+        if(this.selectedFile){
+          this.selectedFile.selected = ""
+        }
+        this.selectedFile = node
+//        if(this.intervalId){
+//          clearInterval(this.intervalId)
+//        }
+        if(!node.isFolder){
+          const fileName = node.model.text
+          const path = node.model.path
           this.preCursor = null;
           this.getFileAndDrawEditor(fileName, path)
           this.sendJoinMessage(fileName)
-        } else {
-          this.openDirectory(node)
         }
       },
       getFileAndDrawEditor (fileName, path) {
@@ -121,6 +165,7 @@
         this.axios.get(url,param).then((result) => {
           this.fileName = fileName
           this.fileContent = result.data
+//          this.intervalId = setInterval(this.selectedFile.update.bind(this.selectedFile,this.fileContent),10000);
           this.setFileMode();
           this.drawEditor()
           if(this.subscribeObject){
@@ -141,29 +186,6 @@
           this.editor.getSession().setMode('ace/mode/text')
         }
       },
-      openDirectory (node) {
-        console.log(this.fileList)
-        console.log(node)
-      },
-      getFileList () {
-        this.axios.get('/api/projects/'+this.projectId +'/directories').then((result) => {
-          this.fileList = result.data.filter((file) => {
-            if (file.type === 'FILE') {
-              file.icon = 'tree-file'
-            } else {
-              file.children = [{
-                text: 'Loading...',
-                value: 'Loading...',
-                loading: true,
-              }]
-            }
-            file.path = ''
-            return file
-          })
-        }).catch((error) => {
-          console.log(error)
-        })
-      },
       drawEditor () {
         this.editor.setValue(this.fileContent)
         this.editor.clearSelection()
@@ -176,35 +198,6 @@
         let lastDot = filename.lastIndexOf('.')
         let fileExt = filename.substring(lastDot, fileLen).toLowerCase()
         return fileExt
-      },
-      toggleDirectory (node) {
-        if (node.data.childFlag == undefined && node.data.type == 'DIRECTORY') {
-          const param = {
-            params: {
-              path: node.data.path
-            }
-          }
-          this.axios.get('/api/projects/'+this.projectId+'/directories/' + node.data.text, param).then((result) => {
-            let temp = result.data.filter((file) => {
-              if (file.type === 'FILE') {
-                file.icon = 'tree-file'
-              } else {
-                file.children = [{
-                  text: 'Loading...',
-                  value: 'Loading...',
-                  loading: true,
-                }]
-              }
-              file.path = node.data.path + '\\' + node.data.text
-              return file
-            })
-            node.data.childFlag = true
-            node.data.children = temp
-
-          }).catch((error) => {
-            console.log(error)
-          })
-        }
       },
       getCookieValue: function (cookieName) {
         cookieName = cookieName + '='
@@ -219,6 +212,32 @@
           cValue = cookieData.substring(start, end)
         }
         return decodeURIComponent(cValue)
+      },
+      addFile: function(){
+        this.addActive = false
+        console.log(this.selectedFile)
+        this.selectedFile.addChild(this.addFileValue)
+      },
+      deleteFile: function(){
+        this.deleteActive = false
+        this.selectedFile.delete()
+      },
+      showModal: function(type){
+        if(this.selectedFile){
+          if(type == 'add'){
+            this.addActive = true
+          }else if(type == 'delete'){
+            this.deleteActive = true
+          }
+        }
+      },
+      update: function(){
+        if(this.selectedFile.model.type=='FILE'){
+          this.selectedFile.update(this.fileContent)
+        }else{
+          this.$toasted.show('파일을 선택해 주세요.',{duration:2000})
+        }
+
       }
     }
 
@@ -240,6 +259,24 @@
     right: 0;
     bottom: 0;
     left: 20%;
+  }
+
+  #project-tree{
+    margin-left : 2em !important;
+  }
+
+  .tree-ul {
+    margin-left: 1em !important;
+  }
+
+  #edit-tree{
+    text-align: left;
+    color: #555555;
+  }
+
+  .edit-icon{
+    display: inline-block;
+    width:20%
   }
 
 </style>

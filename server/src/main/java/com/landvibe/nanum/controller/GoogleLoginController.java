@@ -47,8 +47,8 @@ public class GoogleLoginController {
     public String googleLoginOAuth2CallBack(@RequestParam(value = "code") String code,
                                   HttpSession session, HttpServletResponse response) throws UnsupportedEncodingException {
 
-        CookieGenerator cookieGererator = new CookieGenerator();
-        googleLoginService.login(code, session, cookieGererator, response);
+        CookieGenerator cookieGenerator = new CookieGenerator();
+        googleLoginService.login(code, session, cookieGenerator, response);
         return "redirect:/";
     }
 

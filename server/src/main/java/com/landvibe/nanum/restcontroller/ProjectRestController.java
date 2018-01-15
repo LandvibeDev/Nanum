@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -80,7 +81,25 @@ public class ProjectRestController {
 
     @GetMapping("/{projectId}/files/{fileName:.+}")
     @ResponseStatus(value = HttpStatus.OK)
-    public String getCodeByFile(@PathVariable String projectId,@PathVariable String fileName,@RequestParam("path") String path) {
-        return codeService.getCodeByFile(projectId,fileName,path);
+    public String getFile(@PathVariable String projectId,@PathVariable String fileName,@RequestParam("path") String path) {
+        return codeService.getFile(projectId,fileName,path);
+    }
+
+    @DeleteMapping("/{projectId}/files/{fileName:.+}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteFile(@PathVariable String projectId,@PathVariable String fileName,@RequestParam("path") String path) {
+        codeService.deleteFile(projectId,fileName,path);
+    }
+
+    @PostMapping("/{projectId}/files/{fileName:.+}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void addFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
+        codeService.addFile(projectId,fileName,body.get("path"));
+    }
+
+    @PutMapping("/{projectId}/files/{fileName:.+}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
+        codeService.updateFile(projectId,fileName,body.get("path"),body.get("content"));
     }
 }

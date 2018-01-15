@@ -21,11 +21,15 @@ Vue.use(Vuex)
 /* eslint-disable no-new */
 const store = new Vuex.Store({
   state: {
-    type: 0
+    type: 0,
+    selectedFile: null
   },
   mutations: {
     setType (state, type) {
       state.type = type
+    },
+    setSelectedFile (state, node) {
+      state.selectedFile = node
     }
   }
 })
