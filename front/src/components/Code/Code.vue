@@ -4,9 +4,9 @@
               <!--@item-toggle="toggleDirectory"></v-jstree>-->
     <div id="tree">
       <div id="edit-tree">
-        <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('add')">Add</md-button>
-        <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('delete')">Delete</md-button>
-        <md-button class="md-dense md-primary edit-icon" v-on:click="updateFile">Save</md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="showModal('add')"><md-icon>note_add</md-icon></md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="updateFile"><md-icon>save</md-icon></md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="showModal('delete')"><md-icon>delete_forever</md-icon></md-button>
       </div>
       <ul id="project-tree" class="fa-ul tree-ul">
         <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item"></CodeTree>
@@ -284,7 +284,6 @@
 
   .edit-icon{
     display: inline-block;
-    width:20%
   }
 
 </style>

@@ -128,7 +128,7 @@
           }
         }
         this.axios.delete(url,param).then((result)=>{
-          this.remove()
+          this.$parent.model.children.splice(this.$parent.model.children.indexOf(this.model),1)
           console.log(result)
         })
       },
