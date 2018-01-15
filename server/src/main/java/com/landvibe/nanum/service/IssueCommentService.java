@@ -51,7 +51,6 @@ public class IssueCommentService {
     public IssueComment update(IssueComment issueComment, long issueCommentId) {
         IssueComment fetchedIssueComment = issueCommentRepository.findOne(issueCommentId);
         if (fetchedIssueComment == null){
-            System.out.println("nulllll");
             return null;
         }
         fetchedIssueComment.setUpdatedAt(Calendar.getInstance());

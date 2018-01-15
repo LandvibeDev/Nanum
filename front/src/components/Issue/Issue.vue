@@ -18,12 +18,12 @@
         <p>updatedAt: {{issue.updatedAt}}</p>
 
         <!-- comments -->
-        <div v-for="issueComment in this.issue.issueComments">
-          <IssueComment :issueComment="issueComment" :isTemplate="false"></IssueComment><br>
+        <div v-for="issueComment in issueComments">
+          <IssueComment :issueComment="issueComment" :isTemplate="false" v-on:deleteComment="deleteComment"></IssueComment><br>
         </div>
         <div>
           <!--issue Comment template here for create-->
-          <IssueComment :isTemplate="true"></IssueComment>
+          <IssueComment :isTemplate="true" v-on:addComment="addComment"></IssueComment>
         </div>
       </md-app-content>
     </md-app>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import IssueComment from './IssueComment'
+  import IssueComment from './IssueComment.vue'
 
   export default {
     name: 'Issue',
@@ -56,14 +56,30 @@
             console.log(result)
             this.$router.replace({name: 'IssueList'})
           })
+      },
+      addComment: function (data) {
+        console.log(data)
+        this.issueComments.push(data)
+      },
+      deleteComment: function (commentId) {
+        console.log(commentId)
+        let indexForDelete = this.issueComments.indexOf(commentId)
+        if (indexForDelete > -1) {
+          this.issueComments.splice(indexForDelete, 1)
+        }
       }
     },
     data: function () {
       return {
-        issue: {},
+        issue: {
+          creator: {
+            username: ''
+          }
+        },
         baseUrl: '',
         projectId: this.$route.params.projectId,
-        issueId: ''
+        issueId: '',
+        issueComments: []
       }
     },
     created: function () {
@@ -73,6 +89,7 @@
         .then((result) => {
           console.log(result)
           this.issue = result.data
+          this.issueComments = this.issue.issueComments
         })
     }
   }

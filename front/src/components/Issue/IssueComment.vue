@@ -44,15 +44,17 @@
         })
           .then((result) => {
             console.log(result.data)
+            this.$emit('addComment', result.data)
+            this.content = ''
             // const params = {
             //   issueId: this.issueId
             // }
             // this.$router.replace({name: 'ProjectList', params: params})
             // !temp code
-            this.$router.go({
-              path: '/a/1',
-              force: true
-            })
+            // this.$router.go({
+            //   path: '/a/1',
+            //   force: true
+            // })
           })
       },
       updateIssueComment: function () {
@@ -87,6 +89,7 @@
               path: '/a/1',
               force: true
             })
+            // this.$emit('deleteComment', this.issueComment.id)
           })
       }
     },
