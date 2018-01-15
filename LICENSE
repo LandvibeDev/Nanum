@@ -1,50 +1,3 @@
-# Nanum
-
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/LandvibeDev/Nanum/blob/master/LICENSE)
-
-### Overview
-
-
-
-### Features
-
-
-
-### Demo
-
-demo
-
-youtube
-
-### How to run it
-
-
-
-### Third Party Libraries
-
-- [lombok](https://github.com/rzwitserloot/lombok)
-- [sockjs-client](https://github.com/sockjs/sockjs-client)
-- [stomp-websocket](https://github.com/jmesnil/stomp-websocket/)
-- [mysql-connector-j](https://github.com/mysql/mysql-connector-j)
-- [springfox](https://github.com/springfox/springfox)
-- [axios](https://github.com/axios/axios)
-- [vue](https://github.com/vuejs/vue)
-- [vuex](https://github.com/vuejs/vuex)
-- [vue-material](https://github.com/vuematerial/vue-material)
-
-
-
-### Documentation
-
-
-
-
-
-### License
-
-Nanum is licensed under the MIT License. See [LICENSE](https://github.com/LandvibeDev/Nanum/LICENSE) and [NOTICE](https://github.com/LandvibeDev/Nanum/NOTICE.txt) for full license information
-
-```
 MIT License
 
 Copyright (c) 2017-present GuBeom Jeong, so3500
@@ -74,5 +27,3 @@ jgb625@naver.com
 so3500
 SungOn, Lee
 so3500@gmail.com
-```
-
