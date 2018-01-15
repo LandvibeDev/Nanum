@@ -8,8 +8,8 @@
             created {{this.issueComment.createdAt}} By {{this.issueComment.creator.username}}</div>
         </md-card-header>
 
-        <md-card-content>
-          {{this.issueComment.content}}
+        <md-card-content v-html="this.issueComment.content">
+          <!--{{this.issueComment.content}}-->
         </md-card-content>
 
         <md-card-actions>
@@ -38,7 +38,7 @@
       createIssueComment: function () {
         this.axios.post(this.baseUrl, {
           issueComment: {
-            content: this.content
+            content: this.content.split('\n').join('<br>')
           },
           issueId: this.issueId
         })

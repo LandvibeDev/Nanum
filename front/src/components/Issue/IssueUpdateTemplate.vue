@@ -26,7 +26,7 @@
       updateIssue: function () {
         this.axios.patch(this.baseUrl, {
           title: this.issue.title,
-          content: this.issue.content
+          content: this.issue.content.split('\n').join('<br>')
         })
         .then((result) => {
           console.log(result)

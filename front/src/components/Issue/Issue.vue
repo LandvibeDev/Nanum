@@ -19,7 +19,7 @@
 
         <!-- comments -->
         <div v-for="issueComment in issueComments">
-          <IssueComment :issueComment="issueComment" :isTemplate="false" v-on:deleteComment="deleteComment"></IssueComment><br>
+          <IssueComment class='comment' :issueComment="issueComment" :isTemplate="false" v-on:deleteComment="deleteComment"></IssueComment><br>
         </div>
         <div>
           <!--issue Comment template here for create-->
@@ -53,16 +53,16 @@
       clickIssueDelete: function () {
         this.axios.delete(this.baseUrl)
           .then((result) => {
-            console.log(result)
+            // console.log(result)
             this.$router.replace({name: 'IssueList'})
           })
       },
       addComment: function (data) {
-        console.log(data)
+        // console.log(data)
         this.issueComments.push(data)
       },
       deleteComment: function (commentId) {
-        console.log(commentId)
+        // console.log(commentId)
         let indexForDelete = this.issueComments.indexOf(commentId)
         if (indexForDelete > -1) {
           this.issueComments.splice(indexForDelete, 1)
@@ -87,7 +87,7 @@
       this.baseUrl = '/api/issues/' + this.issueId
       this.axios.get(this.baseUrl)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           this.issue = result.data
           this.issueComments = this.issue.issueComments
         })
@@ -106,6 +106,10 @@
     right: 10%;
     up: 10%;
     position: fixed;
+  }
+
+  .comment {
+    text-align: left
   }
 
   /*.md-app {*/

@@ -4,7 +4,7 @@
       <label>Content</label>
       <md-textarea v-model="issueComment.content" placeholder="Enter content"></md-textarea>
     </md-field>
-    <md-button class="md-raised" v-on:click="updateIssue()">update comment</md-button>
+    <md-button class="md-raised" v-on:click="updateIssueComment()">update comment</md-button>
   </div>
 </template>
 
@@ -19,11 +19,13 @@
       }
     },
     methods: {
-      updateIssue: function () {
+      updateIssueComment: function () {
+        console.log('update request: ' + this.issueComment.content.split('\n').join('<br>'))
         this.axios.patch(this.baseUrl, {
-          content: this.issueComment.content
+          content: this.issueComment.content.split('\n').join('<br>')
         })
           .then((result) => {
+            console.log('update result:')
             console.log(result)
             const params = {
               issueId: this.issueId
@@ -33,11 +35,11 @@
       }
     },
     created: function () {
-      console.log('IssueCommentUpdateTemplate created!')
       this.axios.get(this.baseUrl)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           this.issueComment = result.data
+          this.issueComment.content = this.issueComment.content.split('<br>').join('\n')
         })
     }
   }
