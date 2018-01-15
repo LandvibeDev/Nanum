@@ -7,20 +7,20 @@
 
       <md-speed-dial-content>
         <md-button class="md-icon-button" v-on:click="clickMenu({name:'ProjectMain'})">
-         Home
+          <md-icon>home</md-icon>
         </md-button>
         <md-button class="md-icon-button" v-on:click="clickMenu({name:'ProjectUser'})">
-          User
+          <md-icon>people</md-icon>
         </md-button>
         <md-button class="md-icon-button" v-on:click="clickMenu({name:'Code'})">
-          Code
+          <md-icon>code</md-icon>
         </md-button>
         <md-button class="md-icon-button" v-for="board in boards"
                    v-on:click="clickMenu({name:'ProjectBoard',type:board.type,boardId:board.id})">
           {{board.title}}
         </md-button>
         <md-button class="md-icon-button" v-on:click="clickMenu({name:'IssueList'})">
-          Issue
+          <md-icon>announcement</md-icon>
         </md-button>
       </md-speed-dial-content>
     </md-speed-dial>

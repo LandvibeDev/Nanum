@@ -11,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,7 +64,7 @@ public class ProjectRestController {
 
     @GetMapping("/{projectId}/issues")
     @ResponseStatus(value =HttpStatus.OK)
-    public List<Issue> issue(@PathVariable long projectId) { return issueService.getAllByProjectId(projectId); }
+    public HashMap<String, List<Issue>> issue(@PathVariable long projectId) { return issueService.getAllByProjectId(projectId); }
 
     @GetMapping("/{projectId}/directories")
     @ResponseStatus(value = HttpStatus.OK)
@@ -94,7 +93,7 @@ public class ProjectRestController {
     @PostMapping("/{projectId}/files/{fileName:.+}")
     @ResponseStatus(value = HttpStatus.OK)
     public void addFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
-        codeService.addFile(projectId,fileName,body.get("path"));
+        codeService.addFile(projectId,fileName,body.get("path"),body.get("type"));
     }
 
     @PutMapping("/{projectId}/files/{fileName:.+}")

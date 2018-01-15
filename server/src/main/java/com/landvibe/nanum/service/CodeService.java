@@ -81,18 +81,26 @@ public class CodeService {
         return message.toString();
     }
 
-    public boolean addFile(String projectId, String fileName, String path) {
+    public boolean addFile(String projectId, String fileName, String path,String type) {
         String filePath = basePath + projectId + File.separator + path + File.separator + fileName;
-        File file = new File(filePath);
-        try {
-            BufferedWriter fw = new BufferedWriter(new FileWriter(file));
-            fw.flush();
-            fw.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if("FILE".equals(type)){
+            File file = new File(filePath);
+            try {
+                BufferedWriter fw = new BufferedWriter(new FileWriter(file));
+                fw.flush();
+                fw.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }else if("DIRECTORY".equals(type)){
+            File file = new File(filePath);
+            return file.mkdir();
         }
-        return true;
+        return false;
+
+
     }
 
     public boolean deleteFile(String projectId,String fileName,String path){

@@ -15,6 +15,10 @@
 
       <md-card-actions>
         <md-button class="md-icon-button" v-on:click="clickProject">
+          <md-icon>input</md-icon>
+        </md-button>
+
+        <md-button class="md-icon-button">
           <md-icon>favorite</md-icon>
         </md-button>
 

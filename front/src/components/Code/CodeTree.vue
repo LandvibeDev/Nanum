@@ -99,39 +99,36 @@
           this.open = true
         }
       },
-      addChild: function (text) {
+      add: function (text,isDirectory) {
         if(this.isFolder){
           let url = '/api/projects/'+this.projectId + '/files/' + text
+          let fileType = isDirectory ? 'DIRECTORY':'FILE'
           const file = {
             text: text,
-            type: 'FILE',
+            type: fileType,
             path: this.model.path + '/' + this.model.text
           }
           const data={
-            path:this.model.path + '/' + this.model.text
+            path:this.model.path + '/' + this.model.text,
+            type:fileType
           }
           this.model.children.push(file)
           this.axios.post(url,data).then((result)=>{
             console.log(result)
           })
         }else{
-          this.$parent.addChild(text)
+          this.$parent.add(text)
         }
       },
       delete: function(){
-//        this.$parent.model.children.slice(this.$parent.model.children.indexOf(this.model))
         let url = '/api/projects/'+this.projectId + '/files/' + this.model.text
-        const file = {
-          text: this.model.text,
-          type: 'FILE',
-          path: this.model.path
-        }
         const param = {
           params: {
             path:this.model.path
           }
         }
         this.axios.delete(url,param).then((result)=>{
+          this.remove()
           console.log(result)
         })
       },

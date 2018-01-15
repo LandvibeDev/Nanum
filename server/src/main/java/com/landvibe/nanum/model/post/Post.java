@@ -2,18 +2,24 @@ package com.landvibe.nanum.model.post;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.landvibe.nanum.model.User;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import sun.util.resources.cldr.naq.CalendarData_naq_NA;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Calendar;
 
-@Entity
+//@Entity
+//@Getter
+//@Setter
+//@ToString
+//@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@MappedSuperclass
 @Getter
 @Setter
-@ToString
 public class Post {
 
     @Id
@@ -43,10 +49,20 @@ public class Post {
         this.updatedAt = this.createdAt;
     }
 
+    public Post(String content) {
+        this.content = content;
+        this.createdAt = Calendar.getInstance();
+        this.updatedAt = this.createdAt;
+    }
+
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.createdAt = Calendar.getInstance();
         this.updatedAt = this.createdAt;
     }
+
+//    public void setContent(String content){
+//        this.content = content.replace("\r\n", "<br>");
+//    }
 }

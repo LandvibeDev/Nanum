@@ -1,13 +1,13 @@
 <template>
   <div class='container'>
-    <md-button v-on:click="clickIssueCreate()">Create Issue</md-button>
+    <md-button class="md-raised" v-on:click="clickIssueCreate()">Create Issue</md-button>
     <input v-model='searchQuery' class='search-box' placeholder='Search for issues...'>
     <div class='timeline' v-if='anyIssue()'>
       <div v-for='(dateWithIssues, date) in searchIssues'>
         <p v-if='dateWithIssues.length > 0' class='date'>{{ date }}</p>
         <div v-for='issue in dateWithIssues' class='issue'>
           <span class='dot'></span>
-          <IssueItem :issue="issue" :project="project"></IssueItem>
+          <IssueItem :issue="issue"></IssueItem>
         </div>
       </div>
     </div>
@@ -16,7 +16,10 @@
 </template>
 
 <script>
+  import IssueItem from './IssueItem.vue'
+
   export default {
+    components: {IssueItem},
     name: 'IssueList',
     computed: {
       searchIssues () {
@@ -55,7 +58,7 @@
         const params = {
           projectId: this.$route.params.projectId
         }
-        this.$router.push({name: 'IssueTemplate', params: params})
+        this.$router.push({name: 'IssueCreateTemplate', params: params})
       }
     },
     data: function () {

@@ -6,7 +6,7 @@
       <div id="edit-tree">
         <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('add')">Add</md-button>
         <md-button class="md-dense md-primary edit-icon" v-on:click="showModal('delete')">Delete</md-button>
-        <md-button class="md-dense md-primary edit-icon" v-on:click="update">Save</md-button>
+        <md-button class="md-dense md-primary edit-icon" v-on:click="updateFile">Save</md-button>
       </div>
       <ul id="project-tree" class="fa-ul tree-ul">
         <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item"></CodeTree>
@@ -21,10 +21,13 @@
           default content
         -->
         <h3 slot="header">Enter a new file name</h3>
-        <md-field slot="body">
-          <label>name</label>
-          <md-input v-model="addFileValue"/>
-        </md-field>
+        <div slot="body">
+          <md-switch v-model="isAddDirectory">Directory</md-switch>
+          <md-field slot="body">
+            <label>name</label>
+            <md-input v-model="addFileValue"/>
+          </md-field>
+        </div>
       </EditModal>
       <EditModal v-if="deleteActive" @close="deleteActive = false" @confirm="deleteFile">
         <h3 slot="header">delete {{this.selectedFile.model.text}}?</h3>
@@ -64,7 +67,8 @@
         addFileValue: null,
         deleteActive: false,
         selectedFile: null,
-        intervalId: null
+        intervalId: null,
+        isAddDirectory: false
       }
     },
     mounted: function () {
@@ -216,7 +220,9 @@
       addFile: function(){
         this.addActive = false
         console.log(this.selectedFile)
-        this.selectedFile.addChild(this.addFileValue)
+        this.selectedFile.add(this.addFileValue,this.isAddDirectory)
+        this.isAddDirectory=false
+        this.addFileValue=""
       },
       deleteFile: function(){
         this.deleteActive = false
@@ -229,9 +235,11 @@
           }else if(type == 'delete'){
             this.deleteActive = true
           }
+        }else{
+          this.$toasted.show("파일을 선택해 주세요.",{duration:2000})
         }
       },
-      update: function(){
+      updateFile: function(){
         if(this.selectedFile.model.type=='FILE'){
           this.selectedFile.update(this.fileContent)
         }else{

@@ -3,7 +3,9 @@ import Router from 'vue-router'
 import IssueContainer from '../components/Issue/IssueContainer.vue'
 import Issue from '../components/Issue/Issue.vue'
 import IssueList from '../components/Issue/IssueList.vue'
-import IssueTemplate from '../components/Issue/IssueTemplate.vue'
+import IssueCreateTemplate from '../components/Issue/IssueCreateTemplate.vue'
+import IssueUpdateTemplate from '../components/Issue/IssueUpdateTemplate.vue'
+import IssueCommentUpdateTemplate from '../components/Issue/IssueCommentUpdateTemplate'
 import Login from '@/components/Login/Login'
 import Home from '@/components/Home'
 import ProjectContainer from '../components/Project/ProjectContainer.vue'
@@ -86,13 +88,23 @@ export default new Router({
             },
             {
               path: 'new',
-              name: 'IssueTemplate',
-              component: IssueTemplate
+              name: 'IssueCreateTemplate',
+              component: IssueCreateTemplate
             },
             {
               path: ':issueId',
               name: 'Issue',
               component: Issue
+            },
+            {
+              path: ':issueId/update',
+              name: 'IssueUpdateTemplate',
+              component: IssueUpdateTemplate
+            },
+            {
+              path: ':issueId/issue-comment/:issueCommentId/update',
+              name: 'IssueCommentUpdateTemplate',
+              component: IssueCommentUpdateTemplate
             }
           ]
         }
