@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -45,6 +46,6 @@ public class ProjectRestController {
 
     @GetMapping("/{projectId}/issues")
     @ResponseStatus(value =HttpStatus.OK)
-    public List<Issue> issue(@PathVariable long projectId) { return issueService.getAllByProjectId(projectId); }
+    public HashMap<String, List<Issue>> issue(@PathVariable long projectId) { return issueService.getAllByProjectId(projectId); }
 
 }

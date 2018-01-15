@@ -1,6 +1,7 @@
 package com.landvibe.nanum.repository;
 
 import com.landvibe.nanum.model.post.Issue;
+import com.landvibe.nanum.model.post.IssueComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
