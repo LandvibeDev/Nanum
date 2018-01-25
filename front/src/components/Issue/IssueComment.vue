@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isTemplate === false">
+  <div>
     <md-card>
       <md-ripple>
         <md-card-header>
@@ -21,42 +21,13 @@
       </md-ripple>
     </md-card>
   </div>
-  <div v-else>
-    <md-field>
-      <label>Content</label>
-      <md-textarea v-model="content" required></md-textarea>
-    </md-field>
-    <md-button class="md-raised" v-on:click="createIssueComment()">new</md-button>
-  </div>
 </template>
 
 <script>
   export default {
     name: 'IssueComment',
-    props: ['issueComment', 'isTemplate'],
+    props: ['issueComment', 'commentIndex'],
     methods: {
-      createIssueComment: function () {
-        this.axios.post(this.baseUrl, {
-          issueComment: {
-            content: this.content.split('\n').join('<br>')
-          },
-          issueId: this.issueId
-        })
-          .then((result) => {
-            console.log(result.data)
-            this.$emit('addComment', result.data)
-            this.content = ''
-            // const params = {
-            //   issueId: this.issueId
-            // }
-            // this.$router.replace({name: 'ProjectList', params: params})
-            // !temp code
-            // this.$router.go({
-            //   path: '/a/1',
-            //   force: true
-            // })
-          })
-      },
       updateIssueComment: function () {
         const params = {
           issueId: this.issueId,
@@ -79,17 +50,7 @@
       deleteIssueComment: function () {
         this.axios.delete(this.baseUrl + '/' + this.issueComment.id)
           .then((result) => {
-            // console.log(result)
-            // const params = {
-            //   issueId: this.issueId
-            // }
-            // this.$router.push({name: 'Issue', params: params})
-            // !temp code
-            this.$router.go({
-              path: '/a/1',
-              force: true
-            })
-            // this.$emit('deleteComment', this.issueComment.id)
+            this.$emit('deleteComment', this.commentIndex)
           })
       }
     },

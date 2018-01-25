@@ -18,12 +18,11 @@
         <p>updatedAt: {{issue.updatedAt}}</p>
 
         <!-- comments -->
-        <div v-for="issueComment in issueComments">
-          <IssueComment class='comment' :issueComment="issueComment" :isTemplate="false" v-on:deleteComment="deleteComment"></IssueComment><br>
+        <div v-for="issueComment, index in issueComments">
+          <IssueComment class='comment' :issueComment="issueComment" :commentIndex="index" v-on:deleteComment="deleteComment"></IssueComment><br>
         </div>
         <div>
-          <!--issue Comment template here for create-->
-          <IssueComment :isTemplate="true" v-on:addComment="addComment"></IssueComment>
+          <IssueCommentCreateTemplate v-on:addComment="addComment"></IssueCommentCreateTemplate>
         </div>
       </md-app-content>
     </md-app>
@@ -32,10 +31,11 @@
 
 <script>
   import IssueComment from './IssueComment.vue'
+  import IssueCommentCreateTemplate from './IssueCommentCreateTemplate.vue'
 
   export default {
     name: 'Issue',
-    components: {IssueComment},
+    components: {IssueComment, IssueCommentCreateTemplate},
     methods: {
       clickIssueCreate: function () {
         const params = {
@@ -61,12 +61,9 @@
         // console.log(data)
         this.issueComments.push(data)
       },
-      deleteComment: function (commentId) {
-        // console.log(commentId)
-        let indexForDelete = this.issueComments.indexOf(commentId)
-        if (indexForDelete > -1) {
-          this.issueComments.splice(indexForDelete, 1)
-        }
+      deleteComment: function (commentIndex) {
+        this.$delete(this.issueComments, commentIndex) // Only in 2.2.0+:
+        // this.issueComments.splice(commentIndex, 1)
       }
     },
     data: function () {
@@ -90,10 +87,10 @@
           // console.log(result)
           this.issue = result.data
           this.issueComments = this.issue.issueComments
+          console.log(this.issueComments)
         })
     }
   }
-
 </script>
 
 <style scoped>

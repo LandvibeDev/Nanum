@@ -25,8 +25,8 @@
           content: this.issueComment.content.split('\n').join('<br>')
         })
           .then((result) => {
-            console.log('update result:')
-            console.log(result)
+            // console.log('update result:')
+            // console.log(result)
             const params = {
               issueId: this.issueId
             }
