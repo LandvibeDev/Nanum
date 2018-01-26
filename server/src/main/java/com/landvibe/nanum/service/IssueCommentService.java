@@ -10,7 +10,6 @@ import com.landvibe.nanum.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Collection;
 

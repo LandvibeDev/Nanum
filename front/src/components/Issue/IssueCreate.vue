@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: 'IssueCreateTemplate',
+    name: 'IssueCreate',
     data: function () {
       return {
         title: '',
@@ -45,7 +45,7 @@
       }
     },
     created: function () {
-      console.log('IssueTemplate created!')
+      // console.log('Issue created!')
     }
   }
 </script>

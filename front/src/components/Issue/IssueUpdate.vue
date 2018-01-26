@@ -14,7 +14,7 @@
 
 <script>
   export default {
-    name: 'IssueUpdateTemplate',
+    name: 'IssueUpdate',
     data: function () {
       return {
         issue: {},
@@ -29,7 +29,7 @@
           content: this.issue.content.split('\n').join('<br>')
         })
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           const params = {
             projectId: this.projectId,
             issueId: result.data.id // created issue id
@@ -39,7 +39,7 @@
       }
     },
     created: function () {
-      console.log('IssueUpdateTemplate created!')
+      // console.log('IssueUpdate created!')
       this.axios.get(this.baseUrl)
         .then((result) => {
           console.log(result)

@@ -4,13 +4,13 @@
       <label>Content</label>
       <md-textarea v-model="issueComment.content" placeholder="Enter content"></md-textarea>
     </md-field>
-    <md-button class="md-raised" v-on:click="updateIssueComment()">update comment</md-button>
+    <md-button class="md-raised" v-on:click="updateIssueComment()">update issueComment</md-button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'IssueCommentUpdateTemplate',
+    name: 'IssueCommentUpdate',
     data: function () {
       return {
         issueComment: {},

@@ -18,11 +18,11 @@
         <p>updatedAt: {{issue.updatedAt}}</p>
 
         <!-- comments -->
-        <div v-for="issueComment, index in issueComments">
-          <IssueComment class='comment' :issueComment="issueComment" :commentIndex="index" v-on:deleteComment="deleteComment"></IssueComment><br>
+        <div v-for="comment, index in comments">
+          <Comment class='comment' :comment="comment" :commentIndex="index" v-on:deleteComment="deleteComment"></Comment><br>
         </div>
         <div>
-          <IssueCommentCreateTemplate v-on:addComment="addComment"></IssueCommentCreateTemplate>
+          <CommentCreateTemplate v-on:addComment="addComment"></CommentCreateTemplate>
         </div>
       </md-app-content>
     </md-app>
@@ -30,12 +30,12 @@
 </template>
 
 <script>
-  import IssueComment from './IssueComment.vue'
-  import IssueCommentCreateTemplate from './IssueCommentCreateTemplate.vue'
+  import Comment from './IssueComment.vue'
+  import CommentCreateTemplate from './IssueCommentCreate.vue'
 
   export default {
     name: 'Issue',
-    components: {IssueComment, IssueCommentCreateTemplate},
+    components: {Comment, CommentCreateTemplate},
     methods: {
       clickIssueCreate: function () {
         const params = {
@@ -59,11 +59,11 @@
       },
       addComment: function (data) {
         // console.log(data)
-        this.issueComments.push(data)
+        this.comments.push(data)
       },
       deleteComment: function (commentIndex) {
-        this.$delete(this.issueComments, commentIndex) // Only in 2.2.0+:
-        // this.issueComments.splice(commentIndex, 1)
+        this.$delete(this.comments, commentIndex) // Only in 2.2.0+:
+        // this.comments.splice(commentIndex, 1)
       }
     },
     data: function () {
@@ -76,7 +76,7 @@
         baseUrl: '',
         projectId: this.$route.params.projectId,
         issueId: '',
-        issueComments: []
+        comments: []
       }
     },
     created: function () {
@@ -86,8 +86,8 @@
         .then((result) => {
           // console.log(result)
           this.issue = result.data
-          this.issueComments = this.issue.issueComments
-          console.log(this.issueComments)
+          this.comments = this.issue.comments
+          console.log(this.comments)
         })
     }
   }

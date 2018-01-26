@@ -26,14 +26,14 @@
 <script>
   export default {
     name: 'IssueComment',
-    props: ['issueComment', 'commentIndex'],
+    props: ['issueComment', 'issueCommentIndex'],
     methods: {
       updateIssueComment: function () {
         const params = {
           issueId: this.issueId,
           issueCommentId: this.issueComment.id
         }
-        this.$router.push({name: 'IssueCommentUpdateTemplate', params: params})
+        this.$router.push({name: 'IssueCommentUpdate', params: params})
 
         // this.axios.patch(this.baseUrl + '/' + this.issueComment.id, {
         //   issueComment: {
@@ -50,7 +50,7 @@
       deleteIssueComment: function () {
         this.axios.delete(this.baseUrl + '/' + this.issueComment.id)
           .then((result) => {
-            this.$emit('deleteComment', this.commentIndex)
+            this.$emit('deleteIssueComment', this.issueCommentIndex)
           })
       }
     },
