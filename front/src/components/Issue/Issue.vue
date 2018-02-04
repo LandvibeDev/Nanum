@@ -19,10 +19,10 @@
 
         <!-- comments -->
         <div v-for="comment, index in comments">
-          <Comment class='comment' :comment="comment" :commentIndex="index" v-on:deleteComment="deleteComment"></Comment><br>
+          <IssueComment class='comment' :comment="comment" :commentIndex="index" v-on:deleteComment="deleteComment"></IssueComment><br>
         </div>
         <div>
-          <CommentCreateTemplate v-on:addComment="addComment"></CommentCreateTemplate>
+          <IssueCommentCreate v-on:addComment="addComment"></IssueCommentCreate>
         </div>
       </md-app-content>
     </md-app>
@@ -30,12 +30,12 @@
 </template>
 
 <script>
-  import Comment from './IssueComment.vue'
-  import CommentCreateTemplate from './IssueCommentCreate.vue'
+  import IssueComment from './IssueComment.vue'
+  import IssueCommentCreate from './IssueCommentCreate.vue'
 
   export default {
     name: 'Issue',
-    components: {Comment, CommentCreateTemplate},
+    components: {IssueComment, IssueCommentCreate},
     methods: {
       clickIssueCreate: function () {
         const params = {
@@ -107,6 +107,10 @@
 
   .comment {
     text-align: left
+  }
+
+  .page-container {
+    overflow: scroll
   }
 
   /*.md-app {*/

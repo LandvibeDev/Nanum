@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import IssueContainer from '../components/Issue/IssueContainer.vue'
 import Issue from '../components/Issue/Issue.vue'
 import IssueList from '../components/Issue/IssueList.vue'
-import IssueCreateTemplate from '../components/Issue/IssueCreateTemplate.vue'
-import IssueUpdateTemplate from '../components/Issue/IssueUpdateTemplate.vue'
-import IssueCommentUpdateTemplate from '../components/Issue/IssueCommentUpdateTemplate'
+import IssueCreate from '../components/Issue/IssueCreate.vue'
+import IssueUpdate from '../components/Issue/IssueUpdate.vue'
+import IssueCommentUpdate from '../components/Issue/IssueCommentUpdate'
 import Login from '@/components/Login/Login'
 import Home from '@/components/Home'
 import ProjectContainer from '../components/Project/ProjectContainer.vue'
@@ -16,6 +16,7 @@ import ProjectUser from '../components/Project/ProjectUser.vue'
 import ProjectAdd from '../components/Project/ProjectAdd.vue'
 import WriteProjectBoard from '../components/Project/Board/WriteProjectBoard.vue'
 import Code from '../components/Code/Code.vue'
+import MarkDownContainer from '../components/Issue/markdown/MarkDownContainer.vue'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
     {
       path: '/logout',
       redirect: Home
+    },
+    {
+      path: '/markdown',
+      name: 'MarkDownContainer',
+      component: MarkDownContainer
     },
     {
       path: '/projects/:projectId',
@@ -88,8 +94,8 @@ export default new Router({
             },
             {
               path: 'new',
-              name: 'IssueCreateTemplate',
-              component: IssueCreateTemplate
+              name: 'IssueCreate',
+              component: IssueCreate
             },
             {
               path: ':issueId',
@@ -98,13 +104,13 @@ export default new Router({
             },
             {
               path: ':issueId/update',
-              name: 'IssueUpdateTemplate',
-              component: IssueUpdateTemplate
+              name: 'IssueUpdate',
+              component: IssueUpdate
             },
             {
               path: ':issueId/issue-comment/:issueCommentId/update',
-              name: 'IssueCommentUpdateTemplate',
-              component: IssueCommentUpdateTemplate
+              name: 'IssueCommentUpdate',
+              component: IssueCommentUpdate
             }
           ]
         }

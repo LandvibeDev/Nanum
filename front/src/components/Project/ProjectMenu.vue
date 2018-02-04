@@ -35,7 +35,7 @@
       const baseUrl = '/api/projects/'+this.projectId+'/boards'
       this.axios.get(baseUrl)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           this.boards = result.data
         })
     },

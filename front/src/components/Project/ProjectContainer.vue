@@ -21,7 +21,7 @@
       const baseUrl = '/api/projects/' + this.projectId
       this.axios.get(baseUrl)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           this.project = result.data
         })
     },
@@ -37,7 +37,7 @@
 
 <style>
   #content{
-    width:50%;
+    width:75%;
     margin: 0 auto;
   }
 

@@ -2,6 +2,7 @@
   <div>
     <div id = "home">
       <md-button class="md-raised" v-on:click = "clickButton('ProjectList')">Project</md-button>
+      <md-button class="md-raised" v-on:click = "clickButton('MarkDownContainer')">Markdown</md-button>
       <div class="hello">
         <div v-if="this.isLogined === 'true'">
           <p> welcome {{ username }} !</p>
