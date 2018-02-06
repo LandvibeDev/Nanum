@@ -77,25 +77,35 @@
       emitFile:function(node){
         this.$emit("clickFile",node)
       },
-      getFileListAndOpenDirectory:function(){
+      getFileList(){
         const param = {
           params: {
             path: this.model.path
           }
         }
-        this.axios.get('/api/projects/'+this.projectId+'/directories/' + this.model.text, param).then((result) => {
+        return this.axios.get('/api/projects/'+this.projectId+'/directories/' + this.model.text, param).then((result) => {
           if(result.data){
-            let temp = result.data.filter((file) => {
-              file.path = this.model.path + '/' + this.model.text
-              return file
-            })
             this.model.childFlag = true
-            this.model.children = temp
-            this.openDirectory()
+            this.model.children = this.filterFile(result)
+            return new Promise((resolve,reject)=>{resolve()})
           }
         }).catch((error) => {
           console.log(error)
         })
+      },
+      getFileListAndOpenDirectory:function(){
+        this.getFileList().then((result) => {
+          this.openDirectory()
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      filterFile(result){
+        let temp = result.data.filter((file) => {
+          file.path = this.model.path + '/' + this.model.text
+          return file
+        })
+        return temp
       },
       changeType: function () {
         if (!this.isFolder) {
@@ -108,22 +118,16 @@
         if(this.isFolder){
           let url = '/api/projects/'+this.projectId + '/files/' + text
           let fileType = isDirectory ? 'DIRECTORY':'FILE'
-          const file = {
-            text: text,
-            type: fileType,
-            path: this.model.path + '/' + this.model.text
-          }
           const data={
             path:this.model.path + '/' + this.model.text,
             type:fileType
           }
-          this.model.children.push(file)
-          this.$forceUpdate()
           this.axios.post(url,data).then((result)=>{
             console.log(result)
+            this.getFileList().then(()=>{
+              this.$forceUpdate()
+            })
           })
-        }else{
-          this.$parent.add(text)
         }
       },
       delete: function(){
@@ -134,18 +138,14 @@
           }
         }
         this.axios.delete(url,param).then((result)=>{
-          this.$parent.model.children.splice(this.$parent.model.children.indexOf(this.model),1)
-          this.$parent.$forceUpdate()
+          this.$parent.getFileList().then(()=>{
+            this.$parent.$forceUpdate()
+          })
           console.log(result)
         })
       },
       update:function(content){
         let url = '/api/projects/'+this.projectId + '/files/' + this.model.text
-        const file = {
-          text: this.model.text,
-          type: 'FILE',
-          path: this.model.path
-        }
         const data = {
           path:this.model.path,
           content:content
@@ -172,19 +172,14 @@
               fileType: dragFile.model.type
             }
             this.$store.dispatch('moveDragFile',param).then((result)=>{
-              console.log('Move :')
-              dragFile.$parent.model.children.splice(dragFile.$parent.model.children.indexOf(dragFile.model),1)
-              this.model.children.push(dragFile.model)
-              if(dragFile.model.type === 'FILE'){
-                dragFile.model.path = this.model.path + '/' + this.model.text
-              }else if(dragFile.model.type === 'DIRECTORY'){
-                dragFile.model.path = this.model.path + '/' + this.model.text
-                dragFile.changeChildrenPath()
-              }
-              dragFile.$parent.$forceUpdate()
-              this.$forceUpdate()
+              console.log('Move')
+              dragFile.$parent.getFileList().then(()=>{
+                this.getFileList().then(()=>{
+                  dragFile.$parent.$forceUpdate()
+                  this.$forceUpdate()
+                })
+              })
             })
-
           }
         }
       },
@@ -195,17 +190,6 @@
         if(this.isFolder){
           e.preventDefault()
         }
-      },
-      changeChildrenPath(){
-        function changePath(file){
-          for(let child in file.children){
-            child.path = file.path + '/' + file.text
-            if(child.type === 'DIRECTORY'){
-              this.changePath(child)
-            }
-          }
-        }
-        changePath(this.model)
       }
     }
   }
