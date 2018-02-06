@@ -9,6 +9,7 @@ import VueMaterial from 'vue-material'
 import Toasted from 'vue-toasted'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
+import {store} from './store/'
 
 Vue.config.productionTip = false
 
@@ -19,20 +20,6 @@ Vue.use(VueMaterial)
 Vue.use(Vuex)
 
 /* eslint-disable no-new */
-const store = new Vuex.Store({
-  state: {
-    type: 0,
-    selectedFile: null
-  },
-  mutations: {
-    setType (state, type) {
-      state.type = type
-    },
-    setSelectedFile (state, node) {
-      state.selectedFile = node
-    }
-  }
-})
 
 new Vue({
   el: '#app',

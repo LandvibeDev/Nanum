@@ -51,7 +51,7 @@
           projectId: this.projectId,
           boardId: option.boardId
         }
-        this.$store.commit('setType',option.type)
+        this.$store.commit('setBoardType',option.type)
         this.$router.push({name: option.name, params: params})
       }
     }

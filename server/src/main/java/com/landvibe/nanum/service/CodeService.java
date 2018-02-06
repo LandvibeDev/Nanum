@@ -56,7 +56,7 @@ public class CodeService {
     public String getFile(String projectId, String fileName, String path) {
         StringBuilder message = new StringBuilder("");
         File file = new File(basePath + projectId + File.separator + path + File.separator + fileName);
-        if (file.exists() == false) {
+        if (!file.exists()) {
             return null;
         }
         if (file.isFile()) {
@@ -124,5 +124,37 @@ public class CodeService {
             return false;
         }
         return true;
+    }
+
+    public boolean moveFile(String projectId, String fileName, String path, String newPath,String type) {
+        String sourcePath = basePath + projectId + File.separator + path + File.separator + fileName;
+        String destinationPath = basePath + projectId + File.separator + newPath + File.separator + fileName;
+
+        File sourceFile = new File(sourcePath);
+        File destinationFile = new File(destinationPath);
+        if(destinationFile.exists()){
+            return false;
+        }
+
+        if(sourceFile.exists()){
+            return sourceFile.renameTo(destinationFile);
+        }
+
+//        if("FILE".equals(type)){
+//            File sourceFile = new File(sourcePath);
+//            File destinationFile = new File(destinationPath);
+//            if(destinationFile.exists()){
+//                return false;
+//            }
+//
+//            if(sourceFile.exists()){
+//                return sourceFile.renameTo(destinationFile);
+//            }
+//        }else if("DIRECTORY".equals(type)){
+//
+//
+//        }
+        return false;
+
     }
 }

@@ -101,4 +101,10 @@ public class ProjectRestController {
     public void updateFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
         codeService.updateFile(projectId,fileName,body.get("path"),body.get("content"));
     }
+
+    @PutMapping("/{projectId}/moveFiles/{fileName:.+}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void moveFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
+        codeService.moveFile(projectId,fileName,body.get("path"),body.get("newPath"),body.get("type"));
+    }
 }

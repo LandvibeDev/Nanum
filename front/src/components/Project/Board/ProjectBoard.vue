@@ -23,7 +23,7 @@
     components:{PostTemplate},
     props: ['project'],
     created:function(){
-      this.type = this.$store.state.type
+      this.type = this.$store.state.boardType
       if(this.type === 0){
         this.axios.get('/api/boards/'+this.$route.params.boardId).then((result)=>{
           this.type = result.data.type

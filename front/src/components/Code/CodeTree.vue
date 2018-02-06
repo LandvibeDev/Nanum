@@ -3,17 +3,22 @@
     <span class="fa-li">
       <i :class="icon"></i></span>
     <span
+      @dragover="onDragOver"
+      @dragstart="onDragStart"
+      @drop="onDrop"
+      draggable="true"
       @click="toggle"
       @dblclick="changeType"
       :class="selected">
       {{model.text}}
     </span>
 
-    <transition name="slide-fade">
+    <transition name="slide-fade" >
       <ul v-show="open" v-if="isFolder" class="fa-ul tree-ul">
         <CodeTree
           class="item"
-          v-for="model in model.children"
+          v-for="(model, index) in model.children"
+          :key="index"
           v-on:clickFile="emitFile"
           :model="model"
           :projectId="projectId">
@@ -113,6 +118,7 @@
             type:fileType
           }
           this.model.children.push(file)
+          this.$forceUpdate()
           this.axios.post(url,data).then((result)=>{
             console.log(result)
           })
@@ -129,6 +135,7 @@
         }
         this.axios.delete(url,param).then((result)=>{
           this.$parent.model.children.splice(this.$parent.model.children.indexOf(this.model),1)
+          this.$parent.$forceUpdate()
           console.log(result)
         })
       },
@@ -147,6 +154,58 @@
           console.log(result)
           this.$toasted.show('저장되었습니다.',{duration:2000})
         })
+      },
+      onDrop:function(e){
+        e.preventDefault()
+        if(this.isFolder){
+          let dragFile = this.$store.getters.dragFile
+          if(dragFile.$parent === this){
+            return;
+          }
+          if(dragFile) {
+            console.log(dragFile)
+            let param = {
+              projectId: this.projectId,
+              newPath: this.model.path + '/' + this.model.text,
+              path: dragFile.model.path,
+              fileName: dragFile.model.text,
+              fileType: dragFile.model.type
+            }
+            this.$store.dispatch('moveDragFile',param).then((result)=>{
+              console.log('Move :')
+              dragFile.$parent.model.children.splice(dragFile.$parent.model.children.indexOf(dragFile.model),1)
+              this.model.children.push(dragFile.model)
+              if(dragFile.model.type === 'FILE'){
+                dragFile.model.path = this.model.path + '/' + this.model.text
+              }else if(dragFile.model.type === 'DIRECTORY'){
+                dragFile.model.path = this.model.path + '/' + this.model.text
+                dragFile.changeChildrenPath()
+              }
+              dragFile.$parent.$forceUpdate()
+              this.$forceUpdate()
+            })
+
+          }
+        }
+      },
+      onDragStart:function(e){
+        this.$store.commit('setDragFile',this)
+      },
+      onDragOver:function(e){
+        if(this.isFolder){
+          e.preventDefault()
+        }
+      },
+      changeChildrenPath(){
+        function changePath(file){
+          for(let child in file.children){
+            child.path = file.path + '/' + file.text
+            if(child.type === 'DIRECTORY'){
+              this.changePath(child)
+            }
+          }
+        }
+        changePath(this.model)
       }
     }
   }
