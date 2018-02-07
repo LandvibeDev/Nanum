@@ -50,6 +50,7 @@
   import 'brace/mode/java'
   import 'brace/theme/tomorrow'
   import 'brace/ext/language_tools'
+  import 'brace/mode/c_cpp'
   import '../../lib/sockjs.min'
   import '../../lib/stomp.min'
   import CodeTree from './CodeTree.vue'
@@ -74,8 +75,8 @@
         deleteActive: false,
         selectedFile: null,
         isAddDirectory: false,
-        sourceKey : '',
-        receiveFlag : false
+        sourceKey: '',
+        receiveFlag: false
       }
     },
     mounted: function () {
@@ -104,7 +105,6 @@
         this.editor.$blockScrolling = Infinity
         this.editorEl.style.fontSize = '18px'
 
-
       },
       initSockJS () {
         this.socket = new SockJS('/codes')
@@ -124,12 +124,12 @@
       onMessageReceived: function (payload) {
         let data = JSON.parse(payload.body)
         console.log(data)
-        if(data.source == this.sourceKey){
-          return;
+        if (data.source == this.sourceKey) {
+          return
         }
-        var deltas = [];
+        let deltas = []
         deltas[0] = data.delta
-        this.receiveFlag = true;
+        this.receiveFlag = true
         this.session.getDocument().applyDeltas(deltas)
       },
       onJoinMessageReceived: function (payload) {
@@ -146,7 +146,6 @@
       },
       sendJoinMessage: function (fileName) {
         let data = {
-          sender: this.getCookieValue('username'),
           filename: fileName
         }
         this.stompClient.send('/app/join', {}, JSON.stringify(data))
@@ -177,7 +176,7 @@
         this.axios.get(url, param).then((result) => {
           this.fileName = fileName
           this.fileContent = result.data
-          this.makeNewEditSession(this.fileName,this.fileContent)
+          this.makeNewEditSession(this.fileName, this.fileContent)
           if (this.subscribeObject) {
             this.subscribeObject.unsubscribe()
           }
@@ -186,16 +185,16 @@
           console.log(error)
         })
       },
-      makeNewEditSession(fileName,fileContent){
-        this.session.removeAllListeners('change');
+      makeNewEditSession (fileName, fileContent) {
+        this.session.removeAllListeners('change')
         this.session.$stopWorker()
         let newSession = ace.createEditSession(fileContent)
         newSession.setMode(this.getFileMode(fileName))
         newSession.on('change', (delta) => {
           console.log(delta)
-          if(this.receiveFlag){
-            this.receiveFlag = false;
-          }else{
+          if (this.receiveFlag) {
+            this.receiveFlag = false
+          } else {
             this.sendMessage(delta)
           }
           this.fileContent = this.session.getValue()
@@ -212,6 +211,8 @@
           return 'ace/mode/java'
         } else if (ext === '.js') {
           return 'ace/mode/javascript'
+        } else if (ext === '.cpp' || ext === '.c') {
+          return 'ace/mode/c_cpp'
         } else {
           return 'ace/mode/text'
         }
@@ -221,20 +222,6 @@
         let lastDot = filename.lastIndexOf('.')
         let fileExt = filename.substring(lastDot, fileLen).toLowerCase()
         return fileExt
-      },
-      getCookieValue: function (cookieName) {
-        cookieName = cookieName + '='
-        let cookieData = document.cookie
-        console.log(document.cookie)
-        let start = cookieData.indexOf(cookieName)
-        let cValue = ''
-        if (start !== -1) {
-          start += cookieName.length
-          let end = cookieData.indexOf(';', start)
-          if (end === -1) end = cookieData.length
-          cValue = cookieData.substring(start, end)
-        }
-        return decodeURIComponent(cValue)
       },
       addFile: function () {
         this.addActive = false

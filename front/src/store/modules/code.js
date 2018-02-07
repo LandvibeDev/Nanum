@@ -23,7 +23,7 @@ const actions = {
 }
 
 const mutations = {
-  setDragFile (state, dragFile) {
+  setDragFile: function (state, dragFile) {
     state.dragFile = dragFile
   }
 }

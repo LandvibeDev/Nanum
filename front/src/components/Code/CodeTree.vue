@@ -77,7 +77,7 @@
       emitFile:function(node){
         this.$emit("clickFile",node)
       },
-      getFileList(){
+      getFileList: function(){
         const param = {
           params: {
             path: this.model.path
