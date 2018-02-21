@@ -13,7 +13,6 @@ public class CodeMessage {
     private String source;
 
     public enum MessageType {
-        CHAT,
         JOIN,
         LEAVE
     }

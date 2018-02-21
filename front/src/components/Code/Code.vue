@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!--<v-jstree id="tree" :data="fileList" draggable allow-batch whole-row @item-click="clickFile"-->
-    <!--@item-toggle="toggleDirectory"></v-jstree>-->
     <div id="tree">
       <div id="edit-tree">
         <md-button class="md-icon-button edit-icon" v-on:click="showModal('add')">
@@ -15,18 +13,13 @@
         </md-button>
       </div>
       <ul id="project-tree" class="fa-ul tree-ul">
-        <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item"></CodeTree>
+        <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item" ref="rootFile"></CodeTree>
       </ul>
     </div>
     <div id="editor" ref="editor">/*ace editor*/</div>
-    <!--v-on:keyup="keyEvent"-->
 
     <transition name="modal">
       <EditModal v-if="addActive" @close="addActive = false" @confirm="addFile" v-model="addFileValue">
-        <!--
-          you can use custom content here to overwrite
-          default content
-        -->
         <h3 slot="header">Enter a new file name</h3>
         <div slot="body">
           <md-switch v-model="isAddDirectory">Directory</md-switch>
@@ -62,6 +55,7 @@
       return {
         fileContent: '',
         fileName: '',
+        filePath: '',
         socket: null,
         subscribeObject: null,
         subscribeJoinObject: null,
@@ -74,6 +68,7 @@
         addFileValue: null,
         deleteActive: false,
         selectedFile: null,
+        rootFile: null,
         isAddDirectory: false,
         sourceKey: '',
         receiveFlag: false
@@ -81,9 +76,11 @@
     },
     mounted: function () {
       this.initAce()
+      this.rootFile = this.$refs.rootFile
     },
     created: function () {
       this.initSockJS()
+      this.getModifyingFiles(this.projectId)
       this.sourceKey = this.makeRandomId()
     },
     destroyed: function () {
@@ -134,7 +131,26 @@
       },
       onJoinMessageReceived: function (payload) {
         let message = JSON.parse(payload.body)
-        this.$toasted.show(message.sender + '님이 ' + message.filename + '을 수정중입니다', {duration: 2000})
+        console.log('------receiveJoinMessage----')
+        console.log(message)
+        let file = {
+          path:message.path,
+          filename:message.filename
+        }
+        if(message.type === 'LEAVE'){
+          this.$store.commit('removeModifyingFile',file)
+        }else if(message.type === 'JOIN'){
+          if(this.sourceKey !== message.source){
+            this.$toasted.show(message.sender + '님이 ' + message.filename + '을 수정중입니다', {duration: 2000})
+          }
+          this.$store.commit('addModifyingFile',file)
+        }
+
+        if(message.sync === true){
+          this.rootFile.syncFile(file)
+        }
+
+
       },
       sendMessage: function (delta) {
         let data = {
@@ -144,10 +160,15 @@
         console.log(data)
         this.stompClient.send('/app/' + this.fileName, {}, JSON.stringify(data))
       },
-      sendJoinMessage: function (fileName) {
+      sendJoinMessage: function (fileName,path,type) {
         let data = {
-          filename: fileName
+          filename: fileName,
+          path: path,
+          source: this.sourceKey,
+          type: type
         }
+        console.log('-----sendJoinMessage----')
+        console.log(data)
         this.stompClient.send('/app/join', {}, JSON.stringify(data))
       },
       clickFile (node) {
@@ -158,13 +179,17 @@
         if (this.selectedFile) {
           this.selectedFile.selected = ''
         }
-        this.selectedFile = node
+
         if (!node.isFolder) {
           const fileName = node.model.text
           const path = node.model.path
           this.getFileAndMakeNewSession(fileName, path)
-          this.sendJoinMessage(fileName)
+          if(this.fileName !==''){
+            this.sendJoinMessage(this.fileName,this.filePath,'LEAVE')
+          }
+          this.sendJoinMessage(fileName,path,'JOIN')
         }
+        this.selectedFile = node
       },
       getFileAndMakeNewSession (fileName, path) {
         let url = '/api/projects/' + this.projectId + '/files/' + fileName
@@ -176,6 +201,7 @@
         this.axios.get(url, param).then((result) => {
           this.fileName = fileName
           this.fileContent = result.data
+          this.filePath = path
           this.makeNewEditSession(this.fileName, this.fileContent)
           if (this.subscribeObject) {
             this.subscribeObject.unsubscribe()
@@ -260,6 +286,9 @@
           text += possible.charAt(Math.floor(Math.random() * possible.length));
 
         return text
+      },
+      getModifyingFiles: function(projectId){
+        this.$store.dispatch('getModifyingFiles',{projectId})
       }
     }
 

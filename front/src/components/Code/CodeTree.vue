@@ -1,17 +1,22 @@
 <template>
   <li class="file_item" >
     <span class="fa-li">
-      <i :class="icon"></i></span>
+      <i v-if="!sync" :class="icon"></i>
+      <md-progress-spinner v-else :md-diameter="10" :md-stroke="1" md-mode="indeterminate"></md-progress-spinner>
+    </span>
+    <span v-show="sync">
+
+    </span>
     <span
       @dragover="onDragOver"
       @dragstart="onDragStart"
       @drop="onDrop"
       draggable="true"
       @click="toggle"
-      @dblclick="changeType"
       :class="selected">
       {{model.text}}
     </span>
+
 
     <transition name="slide-fade" >
       <ul v-show="open" v-if="isFolder" class="fa-ul tree-ul">
@@ -29,6 +34,13 @@
 </template>
 
 <script>
+//  @example
+//  model = {
+//    text: ""
+//    type: ""
+//    children: []
+//    path: ""
+//  }
   export default {
     name: 'CodeTree',
     props: ['model','projectId'],
@@ -36,13 +48,25 @@
       return {
         open: false,
         icon: "",
-        selected: ""
+        selected: "",
+        sync:false
+      }
+    },
+    watch: {
+      'model.type': function(val){
+        if(this.isFolder){
+          this.icon = "fas fa-folder folder"
+          this.model.children = []
+        }else{
+          this.icon = "fas fa-file file"
+        }
       }
     },
     created:function(){
+      this.checkModifying()
       if(this.isFolder){
         this.icon = "fas fa-folder folder"
-        this.children = []
+        this.model.children = []
       }else{
         this.icon = "fas fa-file file"
       }
@@ -106,13 +130,6 @@
           return file
         })
         return temp
-      },
-      changeType: function () {
-        if (!this.isFolder) {
-          Vue.set(this.model, 'children', [])
-          this.addChild()
-          this.open = true
-        }
       },
       add: function (text,isDirectory) {
         if(this.isFolder){
@@ -189,6 +206,32 @@
       onDragOver:function(e){
         if(this.isFolder){
           e.preventDefault()
+        }
+      },
+      syncFile: function(file){
+        if(this.model.text == file.filename && this.model.path == file.path){
+          this.sync = !this.sync
+          console.log('Sync!!')
+          return true
+        }
+        if(this.isFolder){
+          let length = this.$children.length
+          for(let i=0;i<length;i++){
+            if(this.$children[i].model){
+              if(this.$children[i].syncFile(file)){
+                return true
+              }
+            }
+
+          }
+        }
+
+      },
+      checkModifying(){
+        let files = this.$store.getters.modifyingFiles
+        let length = files.length
+        for(let i=0;i<length;i++){
+          this.syncFile(files[i])
         }
       }
     }

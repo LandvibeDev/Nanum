@@ -1,5 +1,7 @@
 package com.landvibe.nanum.restcontroller;
 
+import com.landvibe.nanum.handler.CodeManager;
+import com.landvibe.nanum.handler.CodeRoom;
 import com.landvibe.nanum.model.Board;
 import com.landvibe.nanum.model.Project;
 import com.landvibe.nanum.model.User;
@@ -106,5 +108,11 @@ public class ProjectRestController {
     @ResponseStatus(value = HttpStatus.OK)
     public void moveFile(@PathVariable String projectId,@PathVariable String fileName,@RequestBody Map<String,String> body) {
         codeService.moveFile(projectId,fileName,body.get("path"),body.get("newPath"),body.get("type"));
+    }
+
+    @GetMapping("/{projectId}/modifyingFiles")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<CodeRoom> getCodeRooms(@PathVariable String projectId) {
+        return codeService.getCodeRooms();
     }
 }

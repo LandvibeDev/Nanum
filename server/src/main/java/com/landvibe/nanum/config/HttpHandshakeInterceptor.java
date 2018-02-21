@@ -1,9 +1,11 @@
 package com.landvibe.nanum.config;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.landvibe.nanum.handler.CodeRoom;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -20,12 +22,14 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
             HttpSession session = servletRequest.getServletRequest().getSession();
             if(session.getAttribute("user") != null){
                 attributes.put("user", session.getAttribute("user"));
+                attributes.put("file", new CodeRoom());
             }
 
         }
         return true;
     }
 
+    @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
                                Exception ex) {
     }
