@@ -18,7 +18,8 @@ public class CodeManager {
     @Autowired
     private SimpMessagingTemplate template;
 
-    public static HashMap<String,CodeRoom> roomList = new HashMap<>();
+    private static HashMap<String,CodeRoom> roomList = new HashMap<>();
+    private static int userNumber = 1;
 
     public void handleJoinMessage(JoinMessage joinMessage, SimpMessageHeaderAccessor headerAccessor){
         Map<String,Object> sessionAttributes = headerAccessor.getSessionAttributes();
@@ -27,31 +28,33 @@ public class CodeManager {
 
         if("JOIN".equals(joinMessage.getType())){
             if (user == null) {
-                joinMessage.setSender("guest");
+                user = new User();
+                user.setUsername("guest" + userNumber);
+                sessionAttributes.put("user",user);
+                joinMessage.setSender(user.getUsername());
+                userNumber++;
             } else {
                 joinMessage.setSender(user.getUsername());
             }
             joinMessage.setSync(addUser(joinMessage.getFilename(),joinMessage.getPath(),user));
-            sessionAttributes.replace("file",roomList.get(filename));
+            sessionAttributes.put("file",roomList.get(filename));
         }else if("LEAVE".equals(joinMessage.getType())){
             joinMessage.setSync(removeUser(joinMessage.getFilename(),user));
-            sessionAttributes.replace("file",null);
         }
 
-        headerAccessor.setSessionAttributes(sessionAttributes);
-
     }
+
 
     public void handleDisconnection(SimpMessageHeaderAccessor headerAccessor){
         User user = (User) headerAccessor.getSessionAttributes().get("user");
         CodeRoom file = (CodeRoom)headerAccessor.getSessionAttributes().get("file");
-        JoinMessage joinMessage = new JoinMessage();
-        joinMessage.setSender(user.getUsername());
-        joinMessage.setFilename(file.getFilename());
-        joinMessage.setPath(file.getPath());
-        joinMessage.setType("LEAVE");
 
         if(file != null){
+            JoinMessage joinMessage = new JoinMessage();
+            joinMessage.setSender(user.getUsername());
+            joinMessage.setFilename(file.getFilename());
+            joinMessage.setPath(file.getPath());
+            joinMessage.setType("LEAVE");
             System.out.println(file.getFilename());
             joinMessage.setSync(removeUser(file.getFilename(),user));
             sendLeaveMessage(joinMessage);
@@ -72,14 +75,13 @@ public class CodeManager {
             roomList.put(filename,codeRoom);
             return true;
         }
-        roomList.put(filename,codeRoom);
+        codeRoom.addUser(user);
         return false;
     }
 
     public boolean removeUser(String filename,User user){
         CodeRoom codeRoom = roomList.get(filename);
         if(codeRoom == null){
-            System.out.println("나오면 안댐");
             return false;
         }
         if(codeRoom.removeUser(user) == 0){

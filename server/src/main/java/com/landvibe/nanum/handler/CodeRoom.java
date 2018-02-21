@@ -25,7 +25,7 @@ public class CodeRoom {
     public int removeUser(User user){
         int size = users.size();
         for(int i=0;i<size;i++){
-            if(users.get(i).getId().equals(user.getId())){
+            if(users.get(i).getUsername().equals(user.getUsername())){
                 users.remove(i);
                 break;
             }

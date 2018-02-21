@@ -53,7 +53,7 @@
       }
     },
     watch: {
-      'model.type': function(val){
+      model: function(){
         if(this.isFolder){
           this.icon = "fas fa-folder folder"
           this.model.children = []
