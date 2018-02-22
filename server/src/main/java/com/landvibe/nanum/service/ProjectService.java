@@ -35,8 +35,10 @@ public class ProjectService {
     @Transactional
     public Project create(Project project,User user){
         User currentUser = userRepository.getOne(user.getId());
+
         project.setCreator(currentUser);
         project.addUser(currentUser);
+
 
         return projectRepository.save(project);
     }

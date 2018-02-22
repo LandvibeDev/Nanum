@@ -13,7 +13,6 @@ import org.springframework.web.util.CookieGenerator;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.beans.Encoder;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -150,5 +149,30 @@ public class GoogleLoginService {
         cookieGenerator.setCookieName("username");
         cookieGenerator.addCookie(response, URLEncoder.encode(loginUser.getUsername(), "utf-8"));
         cookieGenerator.setCookieMaxAge(600);
+    }
+
+
+    // this function will be removed
+    // simple login for application test
+    public void simpleLogin(String username, HttpSession session, HttpServletResponse response)
+            throws UnsupportedEncodingException{
+        CookieGenerator cookieGenerator = new CookieGenerator();
+
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            user = new User();
+            user.setUsername(username);
+            user.setProfileImage("http://download.seaicons.com/icons/icons8/windows-8/512/Users-Guest-icon.png");
+        }
+
+        session.setAttribute("user", user);
+
+        cookieGenerator.setCookieName("isLogin");
+        cookieGenerator.addCookie(response, "true");
+        cookieGenerator.setCookieName("username");
+        cookieGenerator.addCookie(response, URLEncoder.encode(username, "utf-8"));
+        cookieGenerator.setCookieMaxAge(600);
+
+        userRepository.save(user);
     }
 }
