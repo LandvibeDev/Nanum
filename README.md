@@ -1,6 +1,7 @@
 # Nanum
 
 [![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/LandvibeDev/Nanum/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop)](https://travis-ci.org/LandvibeDev/Nanum)
 
 ### Overview
 
