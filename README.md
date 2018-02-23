@@ -1,56 +1,339 @@
 # Nanum
 
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/LandvibeDev/Nanum/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop)](https://travis-ci.org/LandvibeDev/Nanum)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt)[![Build Status](https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop)](https://travis-ci.org/LandvibeDev/Nanum)
 
-### Overview
+## Overview
 
-![nanum](nanum.PNG)
+![nanum](assets/nanum-1.PNG)
 
-Nanum의 핵심 기능은 개발 프로젝트 관리입니다. 사용자가 프로젝트를 생성하고 소스를 수정하면 서버에 결과가 반영됩니다. 같은 프로젝트 팀원들은 실시간으로 프로젝트 소스코드를 수정할 수 있으며, 현재 누가 접속해서 어떤 소스를 수정하고 있는지 알 수 있습니다.
-
-프로젝트를 진행하면서 이슈가 발생할 시 게시판을 통해 이슈를 공유할 수 있습니다. 
+Nanum's key function is development project management. When the user creates a project and modifies the source, the results are reflected on the server. The project team members can modify the project source code in real time and know who is currently accessing to modify which source.
 
 
 
-### Feature
+![architecture-1](assets/ar-1.jpg)
 
-프로젝트 관리
-
-- [x] 프로젝트 소스코드 실시간 공유
-- [ ] 프로젝트 빌드
-
-채팅
-
-- [ ] 프로젝트 멤버 간 채팅 지원
-
-이슈 관리
-
-- [ ] 마크다운 양식 지원
+In addition, we aim to use the docker to operate the Nanum service in a host independent environment.
 
 
 
-### Demo
+## Feature
+
+Project Management
+
+- Project source code real-time synchronization support
+
+Dockerizing
+
+- Provide docker feature supporting above function (see How to Run it)
+
+
+## Demo
 
 [youtube](https://youtu.be/SuTvPegamtY)
 
-
-
-### How to run it
-
-.
+website
 
 
 
-### Documentation
+## Documents
 
-.
+- How to Run it
+  - Deploy app container in AWS or local machine
+  - Develop & Test in local machine
+- Roadmap
+- Contribution Guide
 
 
 
-### Third Party Libraries
 
-- [lombok](https://github.com/rzwitserloot/lombok)
+#### How to Run it
+
+Things that must be installed. (The stated version is the version our team tested.)
+
+- `npm >= 5.6.0`
+- `node >= 8.9.4 `
+- `jdk8`
+- `docker >= 18.02.0-ce`
+- `docker-compose >= 1.8.0 `
+- `gradle >= 3.5.1`
+
+1. Deploy app container in AWS or local machine
+
+   - clone Nanum project
+
+   ```
+   $ git clone https://github.com/LandvibeDev/Nanum
+   $ cd Nanum
+   $ git checkout develop
+   $ git pull origin develop
+   ```
+
+   - Build front project
+
+     ```
+     $ cd front
+     $ npm install
+     $ npm run build
+     ```
+
+   - Edit Dockfile for mysql container (server/mysql/Dockfile)
+
+     ```
+     FROM mysql
+     ENV MYSQL_USER="username"
+     ENV MYSQL_DATABASE="dbname"
+     ENV MYSQL_CONTAINER_NAME="container-name"
+     ENV MYSQL_ROOT_PASSWORD="root-password"
+     ENV MYSQL_PASSWORD="passwoad"
+     ```
+
+   - Get IP
+
+     - when deploying AWS: Get Public DNS(IPv4) of you AWS ec2 instance
+     - e.g. `ec2-xx-xxx-xxx.xx.ap.compute.amazon.com`
+
+     ![aws-1](assets/aws-1.jpg)
+
+     - when deploying local machine: Get ip information of your machine
+     - e.g. `10.0.x.x`, `192.168.x.x`
+
+     ​
+
+   - Make Client ID for Google Cloud Platform
+
+     - Access https://console.cloud.google.com/apis/credentials
+
+     - Make Oauth Client ID
+
+       ![googleapi-0](assets/googleapi-0.jpg)
+
+     - select WebApplication
+
+     - type <public DNS>:<port>
+
+     - type <public DNS>:<port>/login/google/oauth2callback
+
+       ![googleapi-1](assets/googleapi-1.jpg)
+
+     - get Client ID, Client Secret (Never reveal the client secret!)
+
+       ![googleapi-2](assets/googleapi-2.jpg)
+
+   - Edit application.yml (server/src/main/resources/application.yml)
+
+     - copy `application.yml.templete` to `application.yml`
+     - edit datasource (Match the information with Dockerfile for mysql)
+
+     ```
+      datasource:
+        url: # jdbc:mysql://mysql:3306/<db name>
+        username: # <username>
+        password: # <passward>
+     ```
+
+     - edit resources.static-locations
+
+     ```
+      resources:
+        static-locations: file:/front/  # use this when deploy
+     ```
+
+     - edit project.code-location
+       - set location for source code of project whatever you want
+
+     ```
+     project:
+      code-location: /resource
+     ```
+
+     - edit login.google (client-id, client-secret, redirect-uri)
+
+     ```
+     login:
+       google:
+         client-id : # <client-id>
+         client-secret : # <cilent-secret>
+         redirect-uri : # http://<ip>:8080/login/google/oauth2callback
+     ```
+
+   - edit docker-compose.yml (server/docker-compose.yml)
+
+     ```
+     version: "2"
+
+     services:
+         app:
+             container_name: app
+             build: .
+
+             # we can set environment
+             ports:
+                 - 8080:8080
+             links:
+                 - mysql:mysql
+             volumes:
+                 - ../front/dist:/front
+                 - ../resource:/resource
+
+         mysql:
+             container_name: mysql
+             build: ./mysql
+             ports:
+                 - 3306
+             volumes:
+             - ../mysql/mysql:/var/lib/mysql
+
+     ```
+
+   - Run the following shell script
+
+     ```
+     $ cd Nanum/server
+     $ ./gradlew build -x test
+     ----------------------------------------------------
+     :compileJava UP-TO-DATE
+     :processResources UP-TO-DATE
+     ...
+     BUILD SUCCESSFUL
+
+     Total time: 5.305 secs
+     ----------------------------------------------------
+
+     $ sudo docker-compose build
+     ----------------------------------------------------
+     Building mysql
+     Building app
+     Step 1/6 : FROM mysql
+     ...
+     Successfully built 95843209de9c
+     Successfully tagged server_app:latest
+     ----------------------------------------------------
+
+     # Build the image and run the service according to the contents of the docker-compose.yml file.
+     $ docker-compose up
+     ----------------------------------------------------
+     Creating mysql ...
+     Creating app ...
+     ...
+     ----------------------------------------------------
+
+     # Clear the service. Deletes containers and networks, and clears volumes according to options.
+     $ docker-compose down
+
+     # Shows the services running in the current environment.
+     $ docker-compose ps
+     ```
+
+   - connect to <ip>:8080
+
+     ​
+
+
+2. Develop & Test in local machine
+   - Clone Nanum Project (See above)
+
+   - Edit code (if you want)
+
+   - Build front Project (See above)
+
+   - Edit Dockfile for mysql container (server/mysql/Dockfile) (See above)
+
+   - Get IP of you machine
+
+     - Windows: `ipconfig`, Linux(Ubuntu): `ifconfig`
+     - WARNING: if you use "localhost" for your ip, only you can login in this service
+
+   - Make Client ID for Google Cloud Platform (See above)
+
+   - Edit application.yml (server/resources/application.yml)
+
+     - edit resources.static-locations
+
+       ```
+        resources:
+        	static-locations: file:../front/dist/
+       ```
+
+     - edit project.code-location
+
+       - set location for source code of project whatever you want
+
+     ```
+     project:
+      code-location: # project location
+     ```
+
+     - edit login.google (client-id, client-secret, redirect-uri)
+
+     ```
+     login:
+       google:
+         client-id : # <client-id>
+         client-secret : # <cilent-secret>
+         redirect-uri : # http://<ip>:8080/login/google/oauth2callback
+     ```
+
+     - edit docker-compose.yml (server/docker-compose.yml)
+
+     ```
+     version: "2"
+
+     services:
+         app:
+             container_name: app
+             build: .
+
+             # we can set environment
+             ports:
+                 - 8080:8080
+             links:
+                 - mysql:mysql
+             volumes:
+                 - ../front/dist:/front
+                 - ../resource:/resource
+
+         mysql:
+             container_name: mysql
+             build: ./mysql
+             ports:
+                 - 3306
+             volumes:
+             - ../docker/mysql:/var/lib/mysql
+     ```
+
+   - Run the following shell script
+
+   - connect to <ip>:8080
+
+
+
+
+
+#### Roadmap
+
+Project Management
+
+- [x] Project source code real-time synchronization support
+- [ ] Project build support
+
+chatting
+
+- [ ] Chat support between project members
+
+Issue Management
+
+- [ ] Mark-down form support
+
+
+
+#### Contribution Guide
+
+Fill the templete of issues or PRs.
+
+
+
+## Dependency
+
 - [sockjs-client](https://github.com/sockjs/sockjs-client)
 - [stomp-websocket](https://github.com/jmesnil/stomp-websocket/)
 - [mysql-connector-j](https://github.com/mysql/mysql-connector-j)
@@ -62,9 +345,16 @@ Nanum의 핵심 기능은 개발 프로젝트 관리입니다. 사용자가 프�
 
 
 
-### License
 
-Nanum is licensed under the MIT License. See [LICENSE](https://github.com/LandvibeDev/Nanum/LICENSE) and [NOTICE](https://github.com/LandvibeDev/Nanum/NOTICE.txt) for full license information
+## Bug Report
+
+If you find a bug, please report to us posting [issues](https://github.com/LandVibeDev/Nanum/issues) on GitHub.
+
+
+
+## License
+
+Nanum is licensed under the MIT License. See [LICENSE](https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt) and [NOTICE](https://github.com/LandvibeDev/Nanum/blob/develop/NOTICE.txt) for full license information
 
 ```
 MIT License
@@ -97,4 +387,3 @@ so3500
 SungOn, Lee
 so3500@gmail.com
 ```
-

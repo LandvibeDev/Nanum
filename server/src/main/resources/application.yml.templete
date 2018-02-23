@@ -1,44 +1,44 @@
-#server:
-# port: 8080
+server:
+ port: 8080
 
-#security:
-#  user:
-#    name: <username>
-#    password: <passward>
+spring:
+ messages:
+   encoding: UTF-8
+ jpa:
+   hibernate:
+     ddl-auto: update
+   show-sql: true
+   open-in-view: true
+ datasource:
+   url: jdbc:mysql://mysql:3306/nanum      # deploy
+#   url: jdbc:mysql://localhost:3306/nanum # develop
+   username: # <username>
+   password: # <password>
+   driver-class-name: com.mysql.jdbc.Driver
+   dbcp2:
+     disconnection-sql-codes:
+ session:
+   store-type: none
+ resources:
+    static-locations: file:/front/      # deploy
+#    static-locations: file:../front/dist # develop
 
-#login:
-#  google:
-#    oauth-endpoint:
-#    token-endpoint:
-#    user-info-endpoint:
-##    scope-list:
-##      - https://www.googleapis.com/auth/plus.login
-##      - https://www.googleapis.com/auth/plus.me
-#    scope:
-#    include-granted-scopes:
-#    state:
-#    access-type:
-#    response-type:
-#    approval-prompt:
-#    client-id :
-#    client-secret :
-#    redirect-uri :
-#    grant-type :
+project:
+  code-location: # wherever you want
 
-#spring:
-# messages:
-#   encoding: UTF-8
-# jpa:
-#   hibernate:
-#     ddl-auto: update
-#   show-sql: true
-#   open-in-view: true
-# datasource:
-#   url: jdbc:mysql://localhost:3306/<database name>
-#   username: <username>
-#   password: <passward>
-#   driver-class-name: com.mysql.jdbc.Driver
-# session:
-#   store-type: none
-# resources:
-#   static-locations: file:../front/dist/
+login:
+  google:
+    oauth-endpoint: https://accounts.google.com/o/oauth2/v2/auth
+    token-endpoint: https://www.googleapis.com/oauth2/v4/token
+    user-info-endpoint: https://www.googleapis.com/oauth2/v2/userinfo
+    #   encoded scopes https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me
+    scope: https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email
+    include-granted-scopes: true
+    state: state_parameter_passthrough_value
+    access-type: offline
+    response-type: code
+    approval-prompt: force # recommended: auto
+    client-id : # <client-id>
+    client-secret : # <cilent-secret>
+    redirect-uri : # http://<ip>:8080/login/google/oauth2callback
+    grant-type : authorization_code
