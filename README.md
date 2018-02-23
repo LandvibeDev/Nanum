@@ -1,6 +1,7 @@
 # Nanum
 
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt)[![Build Status](https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop)](https://travis-ci.org/LandvibeDev/Nanum)
+<a href="https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue.svg"> 
+<a href="https://travis-ci.org/LandvibeDev/Nanum"><img src="https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop">
 
 ## Overview
 
@@ -10,7 +11,7 @@ Nanum's key function is development project management. When the user creates a 
 
 
 
-![architecture-1](assets/ar-1.jpg)
+![architecture-1](assets/ar-1.JPG)
 
 In addition, we aim to use the docker to operate the Nanum service in a host independent environment.
 
