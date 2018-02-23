@@ -2,5 +2,5 @@ install:
   - cd front
   - npm install
 script:
-  - cd front && npm run build
+  - npm run build
   - cd ../server && ./gradlew build -x test
