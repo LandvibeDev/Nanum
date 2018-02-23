@@ -3,6 +3,7 @@ package com.landvibe.nanum.service;
 import com.landvibe.nanum.model.User;
 import com.landvibe.nanum.repository.ProjectRepository;
 import com.landvibe.nanum.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ public class UserService {
     private UserRepository userRepository;
     private ProjectRepository projectRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository,ProjectRepository projectRepository){
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
@@ -24,5 +26,9 @@ public class UserService {
     public Set<User> getByProjectId(long projectId){
         return projectRepository.findById(projectId).getUsers();
     }
+
+
+
+
 
 }

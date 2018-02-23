@@ -1,19 +1,29 @@
 <template>
   <li class="file_item" >
     <span class="fa-li">
-      <i :class="icon"></i></span>
+      <i v-if="!sync" :class="icon"></i>
+      <md-progress-spinner v-else :md-diameter="10" :md-stroke="1" md-mode="indeterminate"></md-progress-spinner>
+    </span>
+    <span v-show="sync">
+
+    </span>
     <span
+      @dragover="onDragOver"
+      @dragstart="onDragStart"
+      @drop="onDrop"
+      draggable="true"
       @click="toggle"
-      @dblclick="changeType"
       :class="selected">
       {{model.text}}
     </span>
 
-    <transition name="slide-fade">
+
+    <transition name="slide-fade" >
       <ul v-show="open" v-if="isFolder" class="fa-ul tree-ul">
         <CodeTree
           class="item"
-          v-for="model in model.children"
+          v-for="(model, index) in model.children"
+          :key="index"
           v-on:clickFile="emitFile"
           :model="model"
           :projectId="projectId">
@@ -24,6 +34,13 @@
 </template>
 
 <script>
+//  @example
+//  model = {
+//    text: ""
+//    type: ""
+//    children: []
+//    path: ""
+//  }
   export default {
     name: 'CodeTree',
     props: ['model','projectId'],
@@ -31,13 +48,25 @@
       return {
         open: false,
         icon: "",
-        selected: ""
+        selected: "",
+        sync:false
+      }
+    },
+    watch: {
+      model: function(){
+        if(this.isFolder){
+          this.icon = "fas fa-folder folder"
+          this.model.children = []
+        }else{
+          this.icon = "fas fa-file file"
+        }
       }
     },
     created:function(){
+      this.checkModifying()
       if(this.isFolder){
         this.icon = "fas fa-folder folder"
-        this.children = []
+        this.model.children = []
       }else{
         this.icon = "fas fa-file file"
       }
@@ -72,52 +101,50 @@
       emitFile:function(node){
         this.$emit("clickFile",node)
       },
-      getFileListAndOpenDirectory:function(){
+      getFileList: function(){
         const param = {
           params: {
             path: this.model.path
           }
         }
-        this.axios.get('/api/projects/'+this.projectId+'/directories/' + this.model.text, param).then((result) => {
+        return this.axios.get('/api/projects/'+this.projectId+'/directories/' + this.model.text, param).then((result) => {
           if(result.data){
-            let temp = result.data.filter((file) => {
-              file.path = this.model.path + '/' + this.model.text
-              return file
-            })
             this.model.childFlag = true
-            this.model.children = temp
-            this.openDirectory()
+            this.model.children = this.filterFile(result)
+            return new Promise((resolve,reject)=>{resolve()})
           }
         }).catch((error) => {
           console.log(error)
         })
       },
-      changeType: function () {
-        if (!this.isFolder) {
-          Vue.set(this.model, 'children', [])
-          this.addChild()
-          this.open = true
-        }
+      getFileListAndOpenDirectory:function(){
+        this.getFileList().then((result) => {
+          this.openDirectory()
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      filterFile(result){
+        let temp = result.data.filter((file) => {
+          file.path = this.model.path + '/' + this.model.text
+          return file
+        })
+        return temp
       },
       add: function (text,isDirectory) {
         if(this.isFolder){
           let url = '/api/projects/'+this.projectId + '/files/' + text
           let fileType = isDirectory ? 'DIRECTORY':'FILE'
-          const file = {
-            text: text,
-            type: fileType,
-            path: this.model.path + '/' + this.model.text
-          }
           const data={
             path:this.model.path + '/' + this.model.text,
             type:fileType
           }
-          this.model.children.push(file)
           this.axios.post(url,data).then((result)=>{
             console.log(result)
+            this.getFileList().then(()=>{
+              this.$forceUpdate()
+            })
           })
-        }else{
-          this.$parent.add(text)
         }
       },
       delete: function(){
@@ -128,17 +155,14 @@
           }
         }
         this.axios.delete(url,param).then((result)=>{
-          this.$parent.model.children.splice(this.$parent.model.children.indexOf(this.model),1)
+          this.$parent.getFileList().then(()=>{
+            this.$parent.$forceUpdate()
+          })
           console.log(result)
         })
       },
       update:function(content){
         let url = '/api/projects/'+this.projectId + '/files/' + this.model.text
-        const file = {
-          text: this.model.text,
-          type: 'FILE',
-          path: this.model.path
-        }
         const data = {
           path:this.model.path,
           content:content
@@ -147,6 +171,68 @@
           console.log(result)
           this.$toasted.show('저장되었습니다.',{duration:2000})
         })
+      },
+      onDrop:function(e){
+        e.preventDefault()
+        if(this.isFolder){
+          let dragFile = this.$store.getters.dragFile
+          if(dragFile.$parent === this){
+            return;
+          }
+          if(dragFile) {
+            console.log(dragFile)
+            let param = {
+              projectId: this.projectId,
+              newPath: this.model.path + '/' + this.model.text,
+              path: dragFile.model.path,
+              fileName: dragFile.model.text,
+              fileType: dragFile.model.type
+            }
+            this.$store.dispatch('moveDragFile',param).then((result)=>{
+              console.log('Move')
+              dragFile.$parent.getFileList().then(()=>{
+                this.getFileList().then(()=>{
+                  dragFile.$parent.$forceUpdate()
+                  this.$forceUpdate()
+                })
+              })
+            })
+          }
+        }
+      },
+      onDragStart:function(e){
+        this.$store.commit('setDragFile',this)
+      },
+      onDragOver:function(e){
+        if(this.isFolder){
+          e.preventDefault()
+        }
+      },
+      syncFile: function(file){
+        if(this.model.text == file.filename && this.model.path == file.path){
+          this.sync = !this.sync
+          console.log('Sync!!')
+          return true
+        }
+        if(this.isFolder){
+          let length = this.$children.length
+          for(let i=0;i<length;i++){
+            if(this.$children[i].model){
+              if(this.$children[i].syncFile(file)){
+                return true
+              }
+            }
+
+          }
+        }
+
+      },
+      checkModifying(){
+        let files = this.$store.getters.modifyingFiles
+        let length = files.length
+        for(let i=0;i<length;i++){
+          this.syncFile(files[i])
+        }
       }
     }
   }

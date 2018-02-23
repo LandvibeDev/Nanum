@@ -1,10 +1,10 @@
 package com.landvibe.nanum.service;
 
+import com.landvibe.nanum.handler.CodeManager;
+import com.landvibe.nanum.handler.CodeRoom;
 import com.landvibe.nanum.model.dto.TreeFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,6 +15,11 @@ public class CodeService {
 
     @Value ("${project.code-location}")
     String basePath;
+    private CodeManager codeManager;
+
+    public CodeService(CodeManager codeManager){
+        this.codeManager = codeManager;
+    }
 
     public List<TreeFile> getFiles(String projectId) {
         File file = new File(basePath + projectId +File.separator + "Project");
@@ -56,7 +61,7 @@ public class CodeService {
     public String getFile(String projectId, String fileName, String path) {
         StringBuilder message = new StringBuilder("");
         File file = new File(basePath + projectId + File.separator + path + File.separator + fileName);
-        if (file.exists() == false) {
+        if (!file.exists()) {
             return null;
         }
         if (file.isFile()) {
@@ -108,6 +113,10 @@ public class CodeService {
         if (file.exists() == false) {
             System.out.println("경로가 존재하지 않습니다");
         }
+
+        if("Project".equals(fileName) && "".equals(path)){
+            return false;
+        }
         return file.delete();
     }
 
@@ -124,5 +133,26 @@ public class CodeService {
             return false;
         }
         return true;
+    }
+
+    public boolean moveFile(String projectId, String fileName, String path, String newPath,String type) {
+        String sourcePath = basePath + projectId + File.separator + path + File.separator + fileName;
+        String destinationPath = basePath + projectId + File.separator + newPath + File.separator + fileName;
+
+        File sourceFile = new File(sourcePath);
+        File destinationFile = new File(destinationPath);
+        if(destinationFile.exists()){
+            return false;
+        }
+
+        if(sourceFile.exists()){
+            return sourceFile.renameTo(destinationFile);
+        }
+
+        return false;
+    }
+
+    public List<CodeRoom> getCodeRooms(){
+        return this.codeManager.getRooms();
     }
 }

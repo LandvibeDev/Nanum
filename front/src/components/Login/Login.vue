@@ -7,6 +7,16 @@
     <button class="loginBtn loginBtn--google" v-on:click="googleLogin()">
       Login with Google
     </button>
+
+
+    <!--test code-->
+    <!--It will be removed later-->
+    <md-field style="width:30%;margin: 0 auto">
+      <label>SimpleLogin</label>
+      <md-input v-model="username"></md-input>
+    </md-field>
+    <md-button class="md-raised" v-on:click="simpleLogin">simple login</md-button>
+
   </div>
 
 </template>
@@ -19,13 +29,27 @@
     },
     data: function () {
       return {
-        message: 'this is login page'
+        message: 'this is login page',
+        username:''
       }
     },
     methods: {
       googleLogin: function () {
         const loginUri = '/login/google'
         location.href = loginUri
+      },
+      simpleLogin: function () {
+        // this function will be removed
+        // simple login for application test
+        const loginUri = '/login/simple'
+        let data = {
+          username:this.username
+        }
+
+        this.axios.post(loginUri,data).then(()=>{
+          location.href = '/'
+        })
+
       }
     }
   }

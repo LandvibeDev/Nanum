@@ -1,25 +1,25 @@
 <template>
   <div>
-    <!--<v-jstree id="tree" :data="fileList" draggable allow-batch whole-row @item-click="clickFile"-->
-              <!--@item-toggle="toggleDirectory"></v-jstree>-->
     <div id="tree">
       <div id="edit-tree">
-        <md-button class="md-icon-button edit-icon" v-on:click="showModal('add')"><md-icon>note_add</md-icon></md-button>
-        <md-button class="md-icon-button edit-icon" v-on:click="updateFile"><md-icon>save</md-icon></md-button>
-        <md-button class="md-icon-button edit-icon" v-on:click="showModal('delete')"><md-icon>delete_forever</md-icon></md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="showModal('add')">
+          <md-icon>note_add</md-icon>
+        </md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="updateFile">
+          <md-icon>save</md-icon>
+        </md-button>
+        <md-button class="md-icon-button edit-icon" v-on:click="showModal('delete')">
+          <md-icon>delete_forever</md-icon>
+        </md-button>
       </div>
       <ul id="project-tree" class="fa-ul tree-ul">
-        <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item"></CodeTree>
+        <CodeTree :model="fileList" :projectId="projectId" v-on:clickFile="clickFile" class="item" ref="rootFile"></CodeTree>
       </ul>
     </div>
-    <div v-on:keyup="keyEvent" id="editor" ref="editor">/*ace editor*/</div>
+    <div id="editor" ref="editor">/*ace editor*/</div>
 
     <transition name="modal">
       <EditModal v-if="addActive" @close="addActive = false" @confirm="addFile" v-model="addFileValue">
-        <!--
-          you can use custom content here to overwrite
-          default content
-        -->
         <h3 slot="header">Enter a new file name</h3>
         <div slot="body">
           <md-switch v-model="isAddDirectory">Directory</md-switch>
@@ -43,44 +43,48 @@
   import 'brace/mode/java'
   import 'brace/theme/tomorrow'
   import 'brace/ext/language_tools'
+  import 'brace/mode/c_cpp'
   import '../../lib/sockjs.min'
   import '../../lib/stomp.min'
   import CodeTree from './CodeTree.vue'
   import EditModal from './EditModal.vue'
 
   export default {
-    components: {CodeTree,EditModal},
+    components: {CodeTree, EditModal},
     data: function () {
       return {
         fileContent: '',
         fileName: '',
-        socket:null,
+        filePath: '',
+        socket: null,
         subscribeObject: null,
-        subscribeJoinObject:null,
+        subscribeJoinObject: null,
         stompClient: null,
         editorEl: null,
-        fileList: {text:'Project',type:'DIRECTORY',path:"",children:[]},
-        preCursor: null,
-        solo : true,
-        projectId : this.$route.params.projectId,
+        session: null,
+        fileList: {text: 'Project', type: 'DIRECTORY', path: '', children: []},
+        projectId: this.$route.params.projectId,
         addActive: false,
         addFileValue: null,
         deleteActive: false,
         selectedFile: null,
-        intervalId: null,
-        isAddDirectory: false
+        rootFile: null,
+        isAddDirectory: false,
+        sourceKey: '',
+        receiveFlag: false
       }
     },
     mounted: function () {
       this.initAce()
+      this.rootFile = this.$refs.rootFile
     },
     created: function () {
-//      this.getFileList()
       this.initSockJS()
+      this.getModifyingFiles(this.projectId)
+      this.sourceKey = this.makeRandomId()
     },
-    destroyed : function(){
+    destroyed: function () {
       this.socket.close()
-      clearInterval(this.intervalId)
     },
     methods: {
       initAce: function () {
@@ -93,9 +97,11 @@
           enableLiveAutocompletion: true
         })
         this.editor.setTheme('ace/theme/tomorrow')
-        this.editor.getSession().setMode('ace/mode/javascript')
+        this.session = this.editor.getSession()
+        this.session.setMode('ace/mode/javascript')
         this.editor.$blockScrolling = Infinity
         this.editorEl.style.fontSize = '18px'
+
       },
       initSockJS () {
         this.socket = new SockJS('/codes')
@@ -113,66 +119,91 @@
         this.subscribeObject = this.stompClient.subscribe('/code/' + fileName, this.onMessageReceived)
       },
       onMessageReceived: function (payload) {
-        let message = JSON.parse(payload.body)
-        this.fileContent = message.content
-        this.drawEditor()
-      },
-      onJoinMessageReceived : function(payload){
-        let message = JSON.parse(payload.body)
-        this.$toasted.show(message.sender+"님이 "+message.filename+"을 수정중입니다",{duration:2000})
-      },
-      sendMessage: function (message) {
-        let data = {
-          content: message
+        let data = JSON.parse(payload.body)
+        console.log(data)
+        if (data.source == this.sourceKey) {
+          return
         }
+        let deltas = []
+        deltas[0] = data.delta
+        this.receiveFlag = true
+        this.session.getDocument().applyDeltas(deltas)
+      },
+      onJoinMessageReceived: function (payload) {
+        let message = JSON.parse(payload.body)
+        console.log('------receiveJoinMessage----')
+        console.log(message)
+        let file = {
+          path:message.path,
+          filename:message.filename
+        }
+        if(message.type === 'LEAVE'){
+          this.$store.commit('removeModifyingFile',file)
+        }else if(message.type === 'JOIN'){
+          if(this.sourceKey !== message.source){
+            this.$toasted.show(message.sender + '님이 ' + message.filename + '을 수정중입니다', {duration: 2000})
+          }
+          this.$store.commit('addModifyingFile',file)
+        }
+
+        if(message.sync === true){
+          this.rootFile.syncFile(file)
+        }
+
+
+      },
+      sendMessage: function (delta) {
+        let data = {
+          delta: delta,
+          source: this.sourceKey
+        }
+        console.log(data)
         this.stompClient.send('/app/' + this.fileName, {}, JSON.stringify(data))
       },
-      sendJoinMessage:function(fileName){
+      sendJoinMessage: function (fileName,path,type) {
         let data = {
-          sender: this.getCookieValue('username'),
-          filename: fileName
+          filename: fileName,
+          path: path,
+          source: this.sourceKey,
+          type: type
         }
-        this.stompClient.send("/app/join",{},JSON.stringify(data))
-      },
-      keyEvent: function () {
-        this.fileContent = this.editor.getValue()
-        this.preCursor = this.editor.selection.getCursor()
-        this.sendMessage(this.fileContent)
+        console.log('-----sendJoinMessage----')
+        console.log(data)
+        this.stompClient.send('/app/join', {}, JSON.stringify(data))
       },
       clickFile (node) {
         console.log(node)
-        if(this.selectedFile == node){
+        if (this.selectedFile == node) {
           return
         }
-        if(this.selectedFile){
-          this.selectedFile.selected = ""
+        if (this.selectedFile) {
+          this.selectedFile.selected = ''
         }
-        this.selectedFile = node
-//        if(this.intervalId){
-//          clearInterval(this.intervalId)
-//        }
-        if(!node.isFolder){
+
+        if (!node.isFolder) {
           const fileName = node.model.text
           const path = node.model.path
-          this.preCursor = null;
-          this.getFileAndDrawEditor(fileName, path)
-          this.sendJoinMessage(fileName)
+          this.getFileAndMakeNewSession(fileName, path)
+          if(this.fileName !==''){
+            this.sendJoinMessage(this.fileName,this.filePath,'LEAVE')
+          }
+          this.sendJoinMessage(fileName,path,'JOIN')
         }
+        this.selectedFile = node
       },
-      getFileAndDrawEditor (fileName, path) {
-        let url = '/api/projects/'+this.projectId + '/files/' + fileName
+      getFileAndMakeNewSession (fileName, path) {
+        let url = '/api/projects/' + this.projectId + '/files/' + fileName
         const param = {
           params: {
             path: path
           }
         }
-        this.axios.get(url,param).then((result) => {
+        this.axios.get(url, param).then((result) => {
           this.fileName = fileName
           this.fileContent = result.data
-//          this.intervalId = setInterval(this.selectedFile.update.bind(this.selectedFile,this.fileContent),10000);
-          this.setFileMode();
-          this.drawEditor()
-          if(this.subscribeObject){
+          this.filePath = path
+          this.makeNewEditSession(this.fileName, this.fileContent)
+          if (this.subscribeObject) {
             this.subscribeObject.unsubscribe()
           }
           this.subscribeStomp(this.fileName)
@@ -180,21 +211,36 @@
           console.log(error)
         })
       },
-      setFileMode(){
-        const ext = this.getExtensionOfFilename(this.fileName)
-        if (ext === '.java') {
-          this.editor.getSession().setMode('ace/mode/java')
-        } else if (ext === '.js') {
-          this.editor.getSession().setMode('ace/mode/javascript')
-        } else {
-          this.editor.getSession().setMode('ace/mode/text')
-        }
+      makeNewEditSession (fileName, fileContent) {
+        this.session.removeAllListeners('change')
+        this.session.$stopWorker()
+        let newSession = ace.createEditSession(fileContent)
+        newSession.setMode(this.getFileMode(fileName))
+        newSession.on('change', (delta) => {
+          console.log(delta)
+          if (this.receiveFlag) {
+            this.receiveFlag = false
+          } else {
+            this.sendMessage(delta)
+          }
+          this.fileContent = this.session.getValue()
+        })
+        // session 메모리가 남는 것이 걱정되지만 자동으로 삭제된다고 하니 일단 보류
+        // https://groups.google.com/forum/#!msg/ace-discuss/Eeg8gNDxDbw/XQQlUIQtofkJ
+
+        this.editor.setSession(newSession)
+        this.session = newSession
       },
-      drawEditor () {
-        this.editor.setValue(this.fileContent)
-        this.editor.clearSelection()
-        if(this.preCursor){
-          this.editor.selection.moveCursorTo(this.preCursor.row,this.preCursor.column)
+      getFileMode (fileName) {
+        const ext = this.getExtensionOfFilename(fileName)
+        if (ext === '.java') {
+          return 'ace/mode/java'
+        } else if (ext === '.js') {
+          return 'ace/mode/javascript'
+        } else if (ext === '.cpp' || ext === '.c') {
+          return 'ace/mode/c_cpp'
+        } else {
+          return 'ace/mode/text'
         }
       },
       getExtensionOfFilename (filename) {
@@ -203,49 +249,46 @@
         let fileExt = filename.substring(lastDot, fileLen).toLowerCase()
         return fileExt
       },
-      getCookieValue: function (cookieName) {
-        cookieName = cookieName + '='
-        let cookieData = document.cookie
-        console.log(document.cookie)
-        let start = cookieData.indexOf(cookieName)
-        let cValue = ''
-        if (start !== -1) {
-          start += cookieName.length
-          let end = cookieData.indexOf(';', start)
-          if (end === -1) end = cookieData.length
-          cValue = cookieData.substring(start, end)
-        }
-        return decodeURIComponent(cValue)
-      },
-      addFile: function(){
+      addFile: function () {
         this.addActive = false
         console.log(this.selectedFile)
-        this.selectedFile.add(this.addFileValue,this.isAddDirectory)
-        this.isAddDirectory=false
-        this.addFileValue=""
+        this.selectedFile.add(this.addFileValue, this.isAddDirectory)
+        this.isAddDirectory = false
+        this.addFileValue = ''
       },
-      deleteFile: function(){
+      deleteFile: function () {
         this.deleteActive = false
         this.selectedFile.delete()
       },
-      showModal: function(type){
-        if(this.selectedFile){
-          if(type == 'add'){
+      showModal: function (type) {
+        if (this.selectedFile) {
+          if (type == 'add') {
             this.addActive = true
-          }else if(type == 'delete'){
+          } else if (type == 'delete') {
             this.deleteActive = true
           }
-        }else{
-          this.$toasted.show("파일을 선택해 주세요.",{duration:2000})
+        } else {
+          this.$toasted.show('파일을 선택해 주세요.', {duration: 2000})
         }
       },
-      updateFile: function(){
-        if(this.selectedFile.model.type=='FILE'){
+      updateFile: function () {
+        if (this.selectedFile.model.type == 'FILE') {
           this.selectedFile.update(this.fileContent)
-        }else{
-          this.$toasted.show('파일을 선택해 주세요.',{duration:2000})
+        } else {
+          this.$toasted.show('파일을 선택해 주세요.', {duration: 2000})
         }
+      },
+      makeRandomId: function () {
+        let text = ''
+        let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
+        for (var i = 0; i < 10; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text
+      },
+      getModifyingFiles: function(projectId){
+        this.$store.dispatch('getModifyingFiles',{projectId})
       }
     }
 
@@ -269,20 +312,20 @@
     left: 20%;
   }
 
-  #project-tree{
-    margin-left : 2em !important;
+  #project-tree {
+    margin-left: 2em !important;
   }
 
   .tree-ul {
     margin-left: 1em !important;
   }
 
-  #edit-tree{
+  #edit-tree {
     text-align: left;
     color: #555555;
   }
 
-  .edit-icon{
+  .edit-icon {
     display: inline-block;
   }
 

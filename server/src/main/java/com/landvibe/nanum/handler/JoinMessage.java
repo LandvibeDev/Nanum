@@ -1,24 +1,22 @@
 package com.landvibe.nanum.handler;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
+
+@Getter
+@Setter
+@ToString
 public class JoinMessage {
 
     private String filename;
+    private String path;
     private String sender;
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
+    private String content;
+    private String source;
+    private boolean sync;
+    private String type;
 
 }
