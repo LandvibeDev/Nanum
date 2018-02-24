@@ -23,7 +23,7 @@ Project Management
 
 - Project source code real-time synchronization support
 
-![Modify](assets/code-sync.gif)
+![code-sync](assets/code-sync.gif)
 
 Dockerizing
 
@@ -107,6 +107,10 @@ Things that must be installed. (The stated version is the version our team teste
      - e.g. `10.0.x.x`, `192.168.x.x`
 
      ​
+
+   - You can skip the following steps `Make Client ID for Google Cloud Platform` through Simple Login.
+
+     ![simple-login](assets/simple-login-2.gif)
 
    - Make Client ID for Google Cloud Platform
 
