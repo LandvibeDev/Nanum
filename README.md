@@ -23,6 +23,8 @@ Project Management
 
 - Project source code real-time synchronization support
 
+![Modify](assets/code-sync.gif)
+
 Dockerizing
 
 - Provide docker feature supporting above function (see How to Run it)
@@ -77,13 +79,13 @@ Things that must be installed. (The stated version is the version our team teste
      $ npm run build
      ```
 
-   - Copy Dockfile for server(server/Dockfile)
+   - Copy Dockerfile for server(server/Dockerfile)
 
-     - copy `Dockfile.template` to `Dockfile`
+     - copy `Dockerfile.template` to `Dockerfile`
 
-   - Edit Dockfile for mysql container (server/mysql/Dockfile)
+   - Edit Dockerfile for mysql container (server/mysql/Dockerfile)
 
-     - copy `Dockfile.template` to `Dockfile`
+     - copy `Dockerfile.template` to `Dockerfile`
 
      ```
      FROM mysql
@@ -191,6 +193,7 @@ Things that must be installed. (The stated version is the version our team teste
                  - 3306
              volumes:
              - ../mysql/mysql:/var/lib/mysql
+             - ../mysql/option.cnf:/etc/mysql/conf.d/option.cnf
 
      ```
 
@@ -254,9 +257,9 @@ Things that must be installed. (The stated version is the version our team teste
 
    - Build front Project (See above)
 
-   - Copy Dockfile for server(server/Dockfile)
+   - Copy Dockerfile for server(server/Dockerfile)
 
-   - Edit Dockfile for mysql container (server/mysql/Dockfile) (See above)
+   - Edit Dockerfile for mysql container (server/mysql/Dockerfile) (See above)
 
    - Get IP of you machine
 
@@ -327,7 +330,8 @@ Things that must be installed. (The stated version is the version our team teste
              ports:
                  - 3306
              volumes:
-             - ../docker/mysql:/var/lib/mysql
+             - ../mysql/mysql:/var/lib/mysql
+             - ../mysql/option.cnf:/etc/mysql/conf.d/option.cnf
      ```
 
    - Run the following shell script
