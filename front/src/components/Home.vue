@@ -38,7 +38,7 @@
         this.$router.push('/login')
       },
       logout: function () {
-        let baseUri = 'http://localhost:8080'
+        let baseUri = ''
         this.axios.get(`${baseUri}/logout`, this.get)
           .then((result) => {
             // console.log(result)
