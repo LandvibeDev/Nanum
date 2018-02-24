@@ -2,8 +2,9 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 ./application.yml
-Dockerfile
-docker-compose.yml
+./Dockerfile
+mysql/Dockerfile
+./docker-compose.yml
 
 ### STS ###
 .apt_generated
