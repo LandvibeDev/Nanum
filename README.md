@@ -192,8 +192,8 @@ Things that must be installed. (The stated version is the version our team teste
              ports:
                  - 3306
              volumes:
-             - ../mysql/mysql:/var/lib/mysql
-             - ../mysql/option.cnf:/etc/mysql/conf.d/option.cnf
+             - ./mysql/mysql:/var/lib/mysql
+             - ./mysql/option.cnf:/etc/mysql/conf.d/option.cnf
 
      ```
 
@@ -248,99 +248,6 @@ Things that must be installed. (The stated version is the version our team teste
    - connect to <ip>:8080
 
      ​
-
-
-2. Develop & Test in local machine
-   - Clone Nanum Project (See above)
-
-   - Edit code (if you want)
-
-   - Build front Project (See above)
-
-   - Copy Dockerfile for server(server/Dockerfile)
-
-   - Edit Dockerfile for mysql container (server/mysql/Dockerfile) (See above)
-
-   - Get IP of you machine
-
-     - Windows: `ipconfig`, Linux(Ubuntu): `ifconfig`
-     - WARNING: if you use "localhost" for your ip, only you can login in this service
-
-   - Make Client ID for Google Cloud Platform (See above)
-
-   - Edit application.yml (server/resources/application.yml)
-
-     - edit datasource (Match the information with Dockerfile for mysql)
-
-     ```
-      datasource:
-        url: # jdbc:mysql://localhost:3306/<db name>
-        username: # <username>
-        password: # <passward>
-     ```
-
-     - edit resources.static-locations
-
-       ```
-        resources:
-        	static-locations: file:../front/dist/
-       ```
-
-     - edit project.code-location
-
-       - set location for source code of project whatever you want
-
-     ```
-     project:
-      code-location: # project location
-     ```
-
-     - edit login.google (client-id, client-secret, redirect-uri)
-
-     ```
-     login:
-       google:
-         client-id : # <client-id>
-         client-secret : # <cilent-secret>
-         redirect-uri : # http://<ip>:8080/login/google/oauth2callback
-     ```
-
-     - edit docker-compose.yml (server/docker-compose.yml)
-
-     ```
-     version: "2"
-
-     services:
-         app:
-             container_name: app
-             build: .
-
-             # we can set environment
-             ports:
-                 - 8080:8080
-             links:
-                 - mysql:mysql
-             volumes:
-                 - ../front/dist:/front
-                 - ../resource:/resource
-
-         mysql:
-             container_name: mysql
-             build: ./mysql
-             ports:
-                 - 3306
-             volumes:
-             - ../mysql/mysql:/var/lib/mysql
-             - ../mysql/option.cnf:/etc/mysql/conf.d/option.cnf
-     ```
-
-   - Run the following shell script
-
-   - connect to <ip>:8080
-
-
-
-
 
 #### Roadmap
 
