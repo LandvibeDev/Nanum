@@ -77,7 +77,13 @@ Things that must be installed. (The stated version is the version our team teste
      $ npm run build
      ```
 
+   - Copy Dockfile for server(server/Dockfile)
+
+     - copy `Dockfile.template` to `Dockfile`
+
    - Edit Dockfile for mysql container (server/mysql/Dockfile)
+
+     - copy `Dockfile.template` to `Dockfile`
 
      ```
      FROM mysql
@@ -158,6 +164,8 @@ Things that must be installed. (The stated version is the version our team teste
      ```
 
    - edit docker-compose.yml (server/docker-compose.yml)
+
+     - copy `docker-compose.yml.template` to `docker-compose.yml`
 
      ```
      version: "2"
@@ -246,6 +254,8 @@ Things that must be installed. (The stated version is the version our team teste
 
    - Build front Project (See above)
 
+   - Copy Dockfile for server(server/Dockfile)
+
    - Edit Dockfile for mysql container (server/mysql/Dockfile) (See above)
 
    - Get IP of you machine
@@ -256,6 +266,15 @@ Things that must be installed. (The stated version is the version our team teste
    - Make Client ID for Google Cloud Platform (See above)
 
    - Edit application.yml (server/resources/application.yml)
+
+     - edit datasource (Match the information with Dockerfile for mysql)
+
+     ```
+      datasource:
+        url: # jdbc:mysql://localhost:3306/<db name>
+        username: # <username>
+        password: # <passward>
+     ```
 
      - edit resources.static-locations
 
