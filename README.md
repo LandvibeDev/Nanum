@@ -220,9 +220,18 @@ Things that must be installed. (The stated version is the version our team teste
 
      # Clear the service. Deletes containers and networks, and clears volumes according to options.
      $ docker-compose down
+     ----------------------------------------------------
+     Stopping mysql ... done
+     Stopping app ... done
+     ...
+     ----------------------------------------------------
 
      # Shows the services running in the current environment.
      $ docker-compose ps
+           Name               Command               State            Ports          
+      ------------------------------------------------------------------------
+      app     java -Djava.security.egd=f ...   Up      0.0.0.0:8080->8080/tcp  
+      mysql   docker-entrypoint.sh mysqld      Up      0.0.0.0:32768->3306/tcp 
      ```
 
    - connect to <ip>:8080
