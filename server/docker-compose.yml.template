@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+    app:
+        container_name: app
+        build: .
+
+        ports:
+            - 8080:8080
+        links:
+            - mysql:mysql
+        volumes:
+            - ../front/dist:/front
+            - ../resource:/resource
+
+    mysql:
+        container_name: mysql
+        build: ./mysql
+        ports:
+            - 3306
+        volumes:
+        - ../mysql/mysql:/var/lib/mysql
