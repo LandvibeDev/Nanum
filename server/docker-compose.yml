@@ -20,4 +20,4 @@ services:
             - 3306
         volumes:
         - ./mysql/mysql:/var/lib/mysql
-        - /home/ubuntu/nanum/server/mysql/option.cnf:/etc/mysql/conf.d/option.cnf
+        - ./mysql/option.cnf:/etc/mysql/conf.d/option.cnf
