@@ -32,9 +32,9 @@ Dockerizing
 
 ## Demo
 
-[youtube](https://youtu.be/SuTvPegamtY)
+[youtube](https://youtu.be/jdjNf8WhoN0)
 
-website
+[website](http://ec2-13-125-169-113.ap-northeast-2.compute.amazonaws.com:8080/)
 
 
 
