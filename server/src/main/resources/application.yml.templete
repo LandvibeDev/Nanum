@@ -1,30 +1,5 @@
 server:
- port: 8080
-
-spring:
- messages:
-   encoding: UTF-8
- jpa:
-   hibernate:
-     ddl-auto: update
-   show-sql: true
-   open-in-view: true
- datasource:
-   url: jdbc:mysql://mysql:3306/nanum      # deploy
-#   url: jdbc:mysql://localhost:3306/nanum # develop
-   username: # <username>
-   password: # <password>
-   driver-class-name: com.mysql.jdbc.Driver
-   dbcp2:
-     disconnection-sql-codes:
- session:
-   store-type: none
- resources:
-    static-locations: file:/front/      # deploy
-#    static-locations: file:../front/dist # develop
-
-project:
-  code-location: # wherever you want
+  port: 8080
 
 login:
   google:
@@ -42,3 +17,65 @@ login:
     client-secret : # <cilent-secret>
     redirect-uri : # http://<ip>:8080/login/google/oauth2callback
     grant-type : authorization_code
+
+spring:
+  profiles:
+    active: prod
+
+---
+spring:
+  profiles: prod
+  messages:
+    encoding: UTF-8
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+  datasource:
+    url: jdbc:mysql://mysql:3306/nanum
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      disconnection-sql-codes:
+  session:
+    store-type: none
+  resources:
+    static-locations: file:/front/
+
+project:
+  code-location: /resource/
+---
+spring:
+  profiles: dev
+  messages:
+    encoding: UTF-8
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/nanum
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+    dbcp2:
+      disconnection-sql-codes:
+  session:
+    store-type: none
+  resources:
+    static-locations: file:../front/dist/
+
+project:
+  code-location: ../resource/
+
+
+
+
+
+
+
+
+

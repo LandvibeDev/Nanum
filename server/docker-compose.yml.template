@@ -19,4 +19,5 @@ services:
         ports:
             - 3306
         volumes:
-        - ../mysql/mysql:/var/lib/mysql
+        - ./mysql/mysql:/var/lib/mysql
+        - ./mysql/option.cnf:/etc/mysql/conf.d/option.cnf

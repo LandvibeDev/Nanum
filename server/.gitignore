@@ -1,7 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
-./application.yml
+application.yml
 ./Dockerfile
 mysql/Dockerfile
 ./docker-compose.yml

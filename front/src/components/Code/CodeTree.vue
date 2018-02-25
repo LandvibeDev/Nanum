@@ -1,11 +1,8 @@
 <template>
-  <li class="file_item" >
+  <li class="file_item">
     <span class="fa-li">
       <i v-if="!sync" :class="icon"></i>
       <md-progress-spinner v-else :md-diameter="10" :md-stroke="1" md-mode="indeterminate"></md-progress-spinner>
-    </span>
-    <span v-show="sync">
-
     </span>
     <span
       @dragover="onDragOver"
@@ -60,6 +57,7 @@
         }else{
           this.icon = "fas fa-file file"
         }
+
       }
     },
     created:function(){
@@ -208,9 +206,9 @@
           e.preventDefault()
         }
       },
-      syncFile: function(file){
+      syncFile: function(file,sync){
         if(this.model.text == file.filename && this.model.path == file.path){
-          this.sync = !this.sync
+          this.sync = sync
           console.log('Sync!!')
           return true
         }
@@ -218,7 +216,7 @@
           let length = this.$children.length
           for(let i=0;i<length;i++){
             if(this.$children[i].model){
-              if(this.$children[i].syncFile(file)){
+              if(this.$children[i].syncFile(file,sync)){
                 return true
               }
             }
@@ -231,7 +229,7 @@
         let files = this.$store.getters.modifyingFiles
         let length = files.length
         for(let i=0;i<length;i++){
-          this.syncFile(files[i])
+          this.syncFile(files[i],true)
         }
       }
     }

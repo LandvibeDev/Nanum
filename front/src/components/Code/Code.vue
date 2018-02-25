@@ -147,7 +147,11 @@
         }
 
         if(message.sync === true){
-          this.rootFile.syncFile(file)
+          if(message.type === 'LEAVE'){
+            this.rootFile.syncFile(file,false)
+          }else if(message.type === 'JOIN') {
+            this.rootFile.syncFile(file,true)
+          }
         }
 
 
