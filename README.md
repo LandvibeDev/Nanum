@@ -1,6 +1,6 @@
 # Nanum
 
-<a href="https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue.svg"> 
+<a href="https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue.svg">
 <a href="https://travis-ci.org/LandvibeDev/Nanum"><img src="https://travis-ci.org/LandvibeDev/Nanum.svg?branch=develop">
 
 ## Overview
@@ -246,7 +246,7 @@ Things that must be installed. (The stated version is the version our team teste
            Name               Command               State            Ports          
       ------------------------------------------------------------------------
       app     java -Djava.security.egd=f ...   Up      0.0.0.0:8080->8080/tcp  
-      mysql   docker-entrypoint.sh mysqld      Up      0.0.0.0:32768->3306/tcp 
+      mysql   docker-entrypoint.sh mysqld      Up      0.0.0.0:32768->3306/tcp
      ```
 
    - connect to <ip>:8080
@@ -298,36 +298,4 @@ If you find a bug, please report to us posting [issues](https://github.com/LandV
 
 ## License
 
-Nanum is licensed under the MIT License. See [LICENSE](https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt) and [NOTICE](https://github.com/LandvibeDev/Nanum/blob/develop/NOTICE.txt) for full license information
-
-```
-MIT License
-
-Copyright (c) 2017-present GuBeom Jeong, so3500
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-GuBeomJeong
-GuBeom, Jeong
-jgb625@naver.com
-
-so3500
-SungOn, Lee
-so3500@gmail.com
-```
+Nanum is licensed under the GPLv2 License. See [LICENSE](https://github.com/LandvibeDev/Nanum/blob/develop/LICENSE.txt) and [NOTICE](https://github.com/LandvibeDev/Nanum/blob/develop/NOTICE.txt) for full license information
